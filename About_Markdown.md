@@ -135,11 +135,11 @@
 
   <로컬에 저장된 이미지>
 
-  ![](./python.jpg)
+  ![python](./python.jpg)
 
   <웹에서 주소를 가져온 이미지>
 
-  ![](https://media.vlpt.us/images/cyongchoi/post/9f4a8b71-bdf4-4266-b25c-40fc5e29d761/asasf.png)
+  ![github](https://media.vlpt.us/images/cyongchoi/post/9f4a8b71-bdf4-4266-b25c-40fc5e29d761/asasf.png)
 
   <HTML 태그로 처리하여 사이즈 조절>
 
@@ -148,8 +148,6 @@
   
 
   
-
-
 
 ### 5. Link
 
