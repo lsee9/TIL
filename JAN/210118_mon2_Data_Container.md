@@ -1,3 +1,5 @@
+
+
 ###### Jan_3weeks_Day2_210118(mon)
 
 
@@ -23,9 +25,9 @@
 
 # 시퀀스(sequence)형 컨테이너
 
-> 데이터가 순서대로 나열된(ordered) 형식을 나타냅니다.
+> 데이터가 순서대로 __나열된(ordered) 형식__을 나타냅니다.
 >
-> 주의! 순서대로 나열된 것이 `정렬되었다(sorted)`라는 뜻은 아닙니다. (말그대로 값들간의 순서가 있음을 의미합니다.)
+> 주의! 순서대로 나열된 것이 `정렬되었다(sorted)라는 뜻은 아닙니다. `(말그대로 값들간의 순서가 있음을 의미합니다.)
 
 ## 1. 특징
 
@@ -195,19 +197,18 @@ list(range(3))  #[0, 1, 2], 리스트로 형변환 하겠다.
 |   s[ i ]   | indexing                |   s.count(x)   | x의 개수          |
 | s[ i : j ] | slicing                 |                |                   |
 
+- containment test
 ```python
-#containment test
 s = 'string'
 print('a' in s)  #False
 ```
-
+- concatenation(연결, 연쇄)
 ```python
-#concatenation(연결, 연쇄)
 print('안녕,' + '반가워.')  #안녕,반가워.
 print((1, 2) + (5, 6))  #(1, 2, 5, 6), )+(가 사라지고 ,로 붙는다고 생각하면 쉽습니다.
 print([1, 2] + [5, 6])  #[1, 2, 5, 6]
 ```
-
+-  반복
 ```python
 #숫자 0이 6개 있는 list
 my_list = [0, 0, 0, 0, 0, 0]
@@ -215,9 +216,8 @@ another_list = [0] * 6  #[0, 0, 0, 0, 0, 0]
 #[1, 2]를 3번 반복해서 concatenation
 num_list = [1, 2] * 3  #[1, 2, 1, 2, 1, 2]
 ```
-
+- indexing & slicing
 ```python
-#indexing & slicing
 location = ['서울', '대전', '구미', '광주']
 location[1]  #'대전'
 location[1:3]  #['대전', '구미'], 두번째 인덱스는 포함X
@@ -234,18 +234,20 @@ sample_list[::3]  #전체를 3씩 증가시킨 리스트
 #range활용
 list(range(0,31,3))  
 ```
-
+- len()
 ```python
 len([])  #0
 len([1, 2])  #2
 ```
-
+- min() / max()
 ```python
 a = [1, 3, 2, 6, 4, 2]
 min(a)  #1
 max(a)  #6
 a.count(2)  #2
 ```
+
+
 
 
 
@@ -384,7 +386,84 @@ print(list(items)[0], type(list(items)[0]))  #('kim', 23) <class 'tuple'>
 <img src="210118_mon2_Data_Container.assets/image-20210123012517944.png" alt="image-20210123012517944" style="zoom: 67%;" />
 
 - 이때 어떤 자료구조도 __range나 dictionary로 변경 불가능__합니다.
-- 
+- dictionary는 key, value의 조합으로, 형변환시 key만 보여줍니다.
+- srtring의 형변환
+
+```python
+s = '12345'
+print(s, type(s))  #12345 <class 'str'>
+
+print(list(s), type(list(s)))  #['1', '2', '3', '4', '5'] <class 'list'>
+print(tuple(s), type(tuple(s)))  #('1', '2', '3', '4', '5') <class 'tuple'>
+print(range(s))  #Error
+print(set(s), type(set(s)))  #{'5', '1', '4', '3', '2'} <class 'set'>
+print(dict(s))  #Error
+```
+
+- list의 형변환
+
+```python
+li = [1, 2, 3, 4, 5]
+print(li, type(li), len(li))  #[1, 2, 3, 4, 5] <class 'list'> 5
+
+print(str(li), type(str(li)), len(str(li)))  #[1, 2, 3, 4, 5] <class 'str'> 15
+print(tuple(li), type(li), len(li))  #(1, 2, 3, 4, 5) <class 'tuple'> 5
+print(range(li))  #Error
+print(set(li), type(set(li)), len(set(li)))  #{1, 2, 3, 4, 5} <class 'set'> 5
+print(dict(li))  #Error
+```
+
+- tuple의 형변환
+
+```python
+tu = (1, 2, 3, 4, 5)
+print(tu, type(tu))  #(1, 2, 3, 4, 5) <class 'tuple'> 5
+
+print(str(tu), type(str(tu)), len(str(tu)))  #(1, 2, 3, 4, 5) <class 'str'> 15
+print(list(tu), type(list(tu)), len(list(tu)))  #[1, 2, 3, 4, 5] <class 'list'> 5
+print(range(tu))  #Error
+print(set(tu), type(set(tu)), len(set(tu)))  #{1, 2, 3, 4, 5} <class 'set'> 5
+print(dict(tu))  #Error
+```
+
+- range의 형변환
+
+```python
+ra = range(1, 6)
+print(ra, type(ra), len(ra))  #range(1, 6) <class 'range'> 5
+
+print(str(ra), type(str(ra)), len(str(ra)))  #range(1, 6) <class 'str'> 11
+print(list(ra), type(list(ra)), len(list(ra)))  #[1, 2, 3, 4, 5] <class 'list'> 5
+print(tuple(ra), type(tuple(ra)), len(tuple(ra)))  #(1, 2, 3, 4, 5) <class 'tuple'> 5
+print(set(ra), type(set(ra)), len(set(ra)))  #{1, 2, 3, 4, 5} <class 'set'> 5
+print(dict(ra))  #Error
+```
+
+- set의 형변환
+
+```python
+se = {1, 2, 3, 4, 5}
+print(se, type(se), len(se))  #{1, 2, 3, 4, 5} <class 'set'> 5
+
+print(str(se), type(str(se)), len(str(se)))  #{1, 2, 3, 4, 5} <class 'str'> 15
+print(list(se), type(list(se)), len(list(se)))  #[1, 2, 3, 4, 5] <class 'list'> 5
+print(tuple(se), type(tuple(se)), len(tuple(se)))  #(1, 2, 3, 4, 5) <class 'tuple'> 5
+print(range(se))  #Error
+print(dict(se))  #Error
+```
+
+- dictionary의 형변환
+
+```python
+dic = {1: 2, 3: 4, 5: 6}
+print(dic, type(dic), len(dic))  #{1: 2, 3: 4, 5: 6} <class 'dict'> 3
+
+print(str(dic), type(str(dic)), len(str(dic)))  #{1: 2, 3: 4, 5: 6} <class 'str'> 18
+print(list(dic), type(list(dic)), len(list(dic)))  #[1, 3, 5] <class 'list'> 3
+print(tuple(dic), type(tuple(dic)), len(tuple(dic)))  #(1, 3, 5) <class 'tuple'> 3
+print(range(dic))  #Error
+print(set(dic), type(set(dic)), len(set(dic)))  #{1, 3, 5} <class 'set'> 3
+```
 
 
 
@@ -392,11 +471,112 @@ print(list(items)[0], type(list(items)[0]))  #('kim', 23) <class 'tuple'>
 
 ## 4. 데이터의 분류
 
+> > `mutable` vs `immutable`
+>
+> 데이터는 크게 __변경 가능한 것(mutable)__과 __변경 불가능한 것(immutable)__으로 나뉘며, python에서는 각각 다르게 다룹니다.
 
 
 
+### 4.1 변경 불가능한(`immutable`) 데이터
+
+> 접근 자체가 불가능 한 것은 아니고, __새로 값을 변경하지 못하는 것__을 의미합니다. 즉, 연결된 값 중 하나만 다른 값으로 변경하지 못합니다.(할당 불가)
+
+- 리터럴(literal)
+  - 숫자(Number) : 접근 자체가 불가(20중 2에만 접근불가)
+  - 글자(String)
+  - 참/거짓(Boolean) : 접근X
+- range() : 접근X
+- tuple()
+- ~~frozonset~~
+
+```python
+name = '홍길동'
+print(name[0])  #홍, 접근 O
+name[0] = '김'  #Error, not support item assignment(할당이 안됩니다)
+```
 
 
+
+### 4.2 변경가능한(`mutable`) 데이터
+
+> 접근하여 일부만 변경이 가능합니다.
+
+- list
+- set
+- dictionary
+
+
+
+### 4.3 mutable vs immutable
+
+> 둘의 차이를 살펴보겠습니다!
+
+- list vs tuple
+
+```python
+#mutable
+li = [1, 3]
+li[0] = 2
+print(li)  #[2, 3]
+#immutable
+tu = (1, 3)
+tu[0] = 2  #Error, not support item assignment
+```
+
+- 데이터의 복사
+
+```python
+#immutable
+num1 = 20
+num2 = num1
+num2 = 10
+
+print(num1, num2)  #20, 10
+```
+
+```python
+#mutable
+num1 = [1, 2, 3]
+num2 = num1
+num2[0] = 10
+
+print(num1, num2)  #[10, 2, 3] [10, 2, 3]
+```
+
+> immutable은 변수 자체(num1, num2)에 값을 넣어 사용하기때문에, 단순히 값만 복사하여 사용할 수 있습니다.
+>
+> mutable은 object~~(변수)~~로 따로 관리하고, 선언된 변수(num1, num2)는 object를 가르킴으로써 값을 사용하기때문에 num2에서 변경하면 num1에도 동일하게 적용됩니다.
+
+<img src="210118_mon2_Data_Container.assets/image-20210123115906557.png" alt="image-20210123115906557" style="zoom:80%;" />
+
+- mutable한 경우의 데이터 복사
+
+```python
+num1 = [1, 2, 3]
+num2 = list(num1) #새로운 list를 만듦, 같은 값이라고 따로 생성해줘야함
+num2[0] = 10
+
+print(num1, num2)
+```
+
+
+
+# 정리
+
+- python 자료형
+  - 숫자형 - int, float, complex, immutable
+  - 시퀀스(sequence)형
+    - list 	- mutable
+    - tuple - immutable
+    - range - 숫자의 시퀀스, immutable
+    - string - 문자열, immutable
+  - 비시퀀스(non-sequence)형
+    - set  - 서로 다른(distinct) 값의 집합(collection), mutable
+    - dict - key/value의 집합(collection), mutable
+
+
+
+:fist_oncoming:지금까지 자료형에 대해 알아봤습니다! 각자의 특성을 알고 활용할 수 있어야겠죠?? 다양한 방식으로 접근해보면서 특징을 익혀주길 바랍니다.
 
 
 
