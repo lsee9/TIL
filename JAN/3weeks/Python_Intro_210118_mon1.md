@@ -1,3 +1,5 @@
+
+
 ###### Jan_3weeks\_Day1_210118(mon)
 
 
@@ -630,32 +632,187 @@ print(a, type(a))  #None <class 'NoneType'>
     (list(), tuple()는 다음 챕터에!!)
 
   ```python
-  
+  str(1) + '등'  #1 + '등'은 에러! 명시적 형변환이 필요합니다.
+  int('3')  #3
+int('hi')  #error, 글자가 숫자일때만 가능합니다.
   ```
-
+  
+  ```python
+  int(3.5)  #3
+  float('3.5')  #3.5
+  int('3.5')  #error, float형이므로 변환 불가!!(주의하기)
+  ```
+  
   
 
 ## 연산자(Operator)
 
+> computer = comput + er 로 계산을 위한 용도였습니다! 그런 만큼 연산을 하는 것은 매우 중요한 부분이겠죠? 
+>
+> 이제 연산자에대해 알아봅시다
+
 ### 1. 산술 연산자
 
+> python은 기본적인 사칙 연산이 가능합니다.
 
+| 연산자 |  내용  | 연산자 |      내용      |
+| :----: | :----: | :----: | :------------: |
+|   +    |  덧셈  |   //   |       몫       |
+|   -    |  뺄셈  |   %    | 나머지(modulo) |
+|   *    |  곱셈  |   **   |    거듭제곱    |
+|   /    | 나눗셈 |        |                |
+
+- 나눗셈 (`/`)은 항상 float를 돌려줍니다!(주의!!)
+
+- 정수 나눗셈으로 (소수부 없이) 정수 결과를 얻으려면 `//`연산자를 사용합니다.
+
+  ```python
+  2 ** 100  #2의 100승
+  ```
+
+  ```python
+  5 / 2  #2.5
+  5 // 2  #2
+  5 % 2  #1
+  ```
+
+  ```python
+  #나눗셈관련 함수, 몫과 나머지 한번에 구할 수 있습니다.
+  quotient, remainder = divmod(5, 2)
+  print(f'몫 {quotient}, 나머지 {remainder}')  #몫 2, 나머지 1
+  ```
+
+  ```python
+  #음, 양수 표현
+  positive_num = 4
+  negative_num = -4
+  print(-positive_num)  #-4
+  print(+negative_num)  #-4
+  print(-negative_num)  #4
+  ```
+
+  
 
 ### 2. 비교 연산자
+
+> 값을 비교하는데 사용합니다.(is/is not의 경우는 나중에 다른 수업에서 자세히 다루겠습니다.)
+
+| 연산자 | 내용 | 연산자 | 내용                   |
+| :----: | :--- | :----: | :--------------------- |
+|   <    | 미만 |   ==   | 같음                   |
+|   <=   | 이하 |   !=   | 같지않음               |
+|   >    | 초과 |   is   | 객체 아이덴티티        |
+|   >=   | 이상 | is not | 부정된 객체 아이덴티티 |
+
+```python
+3 < 2  #False
+3 != 3  #False
+3 == 3  #True
+'a' == 'A'  #False
+```
 
 
 
 ### 3. 논리 연산자
 
+> 논리 연산자를 알아보겠습니다. 일반적으로 알고 있는 `&` `|`은 python에서 비트연산자 입니다.
 
+|       연산자       | 내용                         |
+| :----------------: | :--------------------------- |
+|      a and b       | a와 b 모두 True시만 True     |
+|       a or b       | a와 b 모두 False시만 False   |
+| not a (단항연산자) | True -> False, False -> True |
 
+- and 와 or은 조건을 여러개 연결할 때 새용합니다.
 
+```python
+#and의 모든 case
+print(True and True)  #True
+print(True and False)  #False
+print(False and True)  #False
+print(False and False)  #False
+```
 
-#### 3.1 단축평가***
+```python
+#or의 모든 case: 하나라도 True면 True
+print(True or True)  #True
+print(True or False)  #True
+print(False or True)  #True
+print(False or False)  #False
+```
+
+```python
+#not 활용
+print(not True)  #False
+print(not 0)  #True
+```
+
+- a and b : a가 __거짓__이면 __a를 리턴__하고, __참__이면 __b를 리턴__합니다.
+- a or b : a 가 __참__이면 __a를 리턴__하고, __거짓__이면 __b를 리턴__합니다.
+
+#### 3.1 단축평가(short-circuit evaluation)***
+
+> 위와 같이 값이 정해지면 결과가 정해지는 and와 or의 특성을 이용해서 단축평가를 할 수 있습니다.
+
+- 첫 번째 값이 확실할 때, 두 번째 값은 확인하지 않습니다.
+- 조건문에서 뒷 부분을 판단하지 않아도 되기 때문에 속도가 향상됩니다.
+
+< and >
+
+``` python
+'a' and 'b'  #'b', 'a'가 True이므로(0이아닌 모든 값이 True) 뒤의 값을 확인해야해서 'b' 리턴
+
+vowels = 'aeiou'
+('a' and 'b') in vowels  #False, ()먼저 수행하여 'b'를 리턴하고 in연산 결과 False
+('b' and 'a') in vowels  #True, ()먼저 수행하여 'a'리턴, in 결과 True
+```
+
+```python
+#둘다 True여야 True
+#첫번째가 True면 두번째 것도 확인해야함(무조건 두번째 값 리턴)
+print(3 and 5)  #5
+print(3 and 0)  #0
+#첫번째가 False면 무조건 False이므로 두번째를 확인하지않음(첫번째 값 리턴)
+print(0 and 3)  #0
+print(0 and 0)  #0
+```
+
+< or >
+
+```python
+'a' or 'b'  #'a', 'a'가 True이므로 뒤의 값을 확인하지 않음
+```
+
+```python
+#둘 중 하나만 True면 True
+#첫번째가 True면 두번째 확인하지 않음(첫번째 값 리턴)
+print(3 or 5)  #3
+print(3 or 0)  #3
+#첫번째가 False면 두번째도 확인함(두번째 값 리턴)
+print(0 or 3)  #3
+print(0 or 0)  #0
+```
 
 
 
 ### 4. 복합 연산자
+
+> 연산과 대입이 함꼐 이뤄지는 연산자입니다 . While과 같은 반복문에서 개수를 카운트하는 등 값을 계속 증가시킬 때 많이 활용됩니다.
+
+| 연산자 | 내용      | 연산자  | 내용       |
+| :----: | --------- | :-----: | ---------- |
+| a += b | a = a + b | a //= b | a = a // b |
+| a -= b | a = a - b | a %= b  | a = a % b  |
+| a *= b | a = a * b | a **= b | a = a ** b |
+| a /= b | a = a / b |         |            |
+
+```python
+#사용 예시
+cnt = 0
+while cnt < 5:
+    print(cnt)
+    cnt += 1
+```
 
 
 
@@ -663,23 +820,104 @@ print(a, type(a))  #None <class 'NoneType'>
 
 #### 5.1 Concatenation
 
+> 숫자가 아닌 자료형은 `+`연산자를 통해 합칠 수 있습니다.
 
+```python
+#문자열
+'abc' + 'efg'  #'abcefg'
+#list
+[1, 2, 3] + [4, 5, 6]  #[1, 2, 3, 4, 5, 6]
+```
 
 #### 5.2 Containment Test
 
+> `in`연산자를 통해 요소가 속해있는지 여부를 확인할 수 있습니다.
 
+```python
+'a' in 'apple'  #True
+1 in [1, 2, 3]  #True
+100 in range(1, 5)  #False
+```
+
+- `in`연산자가 없다면 반복문과 조건문(for, if)을 사용하여 속하는지 여부를 판단해야하므로 매우 번거롭습니다.
 
 #### 5.3 Identity
+
+> `is`연산자를 통해 동일한 object인지 확인할 수 있습니다. 이는 후에 OOP파트에서 다시 학습하겠습니다.
+
+```python
+a = []
+b = []
+#a, b 모두 빈 list로, ==으로 값을 비교하면 True입니다.
+#is를 통해 object를 비교하면 False로, id()를 통해 다른 메모리에 저장됨을 확인할 수 있습니다.
+print(a == b, a is b)
+print(id(a), id(b))
+```
+
+:point_right:[pythontutor](http://pythontutor.com/)에서 그림으로 좀더 쉽게 이해할 수 있습니다.
+
+```python
+a = 'hi!'
+b = 'hi!'
+a is b  #False, !때문에 같지 않습니다.
+```
+
+> __object interning__
+>
+> 이미 생성된 객체(object)를 재사용(reuse)하는 것을 말합니다. python에서는 특정 범위의 숫자(-5 부터 256 사이의 정수), 특정 문자열(20자 미만의 공백없는 문자열)은 메모리에서 빠르게 찾아 사용할 수 있도록 같은 메모리에 저장하고 있습니다. (이런것이 있다 정도만 알면 될 듯 합니다.)
+
+```python
+a = 'hi'
+b = 'hi'
+a is b  #True
+```
+
+```python
+a = 1
+b = 1
+a is b  #True
+```
+
+```python
+a = 1004
+b = 1004
+a is b  #False
+```
 
 
 
 #### 5.4 Indexing/Slicing
 
+> `[]`를 통해 값에 접근하고(Indexing), `[:]`를 통해 리스트를 슬라이싱(slicing) 할 수 있습니다.
+
+```python
+#indexing
+a = 'apple'
+a[0]  #'a'
+```
+
+```python
+#slicing
+a[0:2]  #'ap'
+```
+
 
 
 ### 6. 연산자 우선순위
 
-
+> 연산할 때 다음과 같은 우선순위가 정해져 있습니다. 순서를 외우기보단 0번인 ()를 사용해 연산 순서를 확실히 하는 것을 추천합니다.
+>
+> 0. `()`을 통한 grouping
+> 1. Slicing
+> 2. Indexing
+> 3. 제곱연산자 `**`
+> 4. 단항연산자 `+`, `-` (음/양수 부호)
+> 5. 산술연산자 `*`, `/`, `%`
+> 6. 산술연산자 `+`, `-`
+> 7. 비교연산자, `in`, `is`
+> 8. `not`
+> 9. `and`
+> 10. `or`
 
 
 
@@ -687,17 +925,43 @@ print(a, type(a))  #None <class 'NoneType'>
 
 ##### 6.1.1 표현식(Expression)
 
+> 표현식 => evaluate => 값
 
+- 하나의 __값(value)으로 환원(return)__될 수 있는 문장을 말합니다.
+
+- 식별자, 값(리터럴), 연산자로 구성됩니다.
+
+- 표현식을 만드는 문법(syntax)는 일반적인 (중위표기) 수식의 규칙과 유사합니다.
+
+  ```python
+  'hello'  #하나의 값도 표현식
+  area(90) < 100  #True를 반환, 표현식
+  result = 'Area : ' + str(90)  #'Area : 90' 하나의 문자열(값)이됨, 표현식
+  ```
+
+  
 
 ##### 6.1.2 문장(Statement)
+
+> 파이썬이 실행 가능한 최소한의 코드 단위(a syntatic unit of programming)로, 표현식이 아닌것을 문장이라 합니다.
+
+```python
+radius = 10  #할당문, 10을 할당할 뿐 표현식X
+if radius > 10:  #문장
+    pass
+print(10)  #표현식X, 10이 출력되는 건 함수의 기능을 하는 것일 뿐 값이 10이 되는 건 아닙니다.
+		   #jupyter notebook에서 실행 결과가 out[]과 함께 나와야 return이 있는 것입니다.
+```
 
 
 
 ##### 6.1.3 문장과 표현식의 관계
 
+> 문장이 표현식을 포함하는 구조입니다!
+
+![](https://user-images.githubusercontent.com/9452521/87619771-f41f5e00-c757-11ea-9e4b-1f76e4ca0981.png)
 
 
 
-
-
+:dancer: 여기까지 오전 수업 내용 정리를 마칩니다! 시간을 내서 복습하고 코드를 짜면서 익숙해지도록 합시다.
 
