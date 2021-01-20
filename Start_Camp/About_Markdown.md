@@ -167,16 +167,16 @@
 
 - `|`(파이프) 사이에 column을 작성하고 Enter를 입력합니다.
 
-  ```
+```
 |col1|col2|col3|
-  ```
-  
-  | col1 | col2 | col3 |
-  | ---- | ---- | ---- |
-  |      |      |      |
-  
+```
+
+| col1 | col2 | col3 |
+| ---- | ---- | ---- |
+|      |      |      |
+
   :raised_hand: Table 만들기 귀찮다면 [Table_Generator](https://www.tablesgenerator.com/markdown_tables)
-  
+
 
 
 
@@ -188,11 +188,11 @@
 
 - `>` 을 입력하고 Enter
 
-  ``` 
+``` 
   > 인용문
   >> 중첩1
   >>> 중첩2
-  ```
+```
 
   > 인용문
   > > 중첩1
