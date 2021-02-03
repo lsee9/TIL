@@ -133,7 +133,7 @@ edit mode(수정모드/ 초록셀)에서 ESC를 누르면 명령모드, Enter를
   print('Hello\
         Python')
   
-  #PEP-8 가이드에 따라 여러줄 문자열은 아래와 같이 쓰는 것이 관계(convention)입니다.
+  #PEP-8 가이드에 따라 여러줄 문자열은 아래와 같이 쓰는 것이 관례(convention)입니다.
   print('''Hello
         Python''')
   ```
@@ -619,7 +619,7 @@ print(a, type(a))  #None <class 'NoneType'>
 
 > 데이터타입은 서로 변환할 수 있습니다.
 
-#### 4.1 암시적 형변환(Implicit Type COnversion)
+#### 4.1 암시적 형변환(Implicit Type Conversion)
 
 > 사용자가 의도하지 않아도, 파이썬 내부에서 __자동으로 변환__하는 경우입니다.
 
@@ -671,13 +671,13 @@ print(a, type(a))  #None <class 'NoneType'>
   ```python
   str(1) + '등'  #1 + '등'은 에러! 명시적 형변환이 필요합니다.
   int('3')  #3
-  int('hi')  #error, 글자가 숫자일때만 가능합니다.
+  int('hi')  #ValueError, 글자가 숫자일때만 가능합니다.
   ```
   
   ```python
   int(3.5)  #3
   float('3.5')  #3.5
-  int('3.5')  #error, float형이므로 변환 불가!!(주의하기)
+  int('3.5')  #ValueError, float형이므로 변환 불가!!(주의하기)
   ```
 
 
