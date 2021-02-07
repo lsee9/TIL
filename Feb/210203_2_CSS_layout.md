@@ -6,7 +6,7 @@
 
 집중집중!! :dizzy_face:
 
-
+<br>
 
 # CSS layout
 
@@ -17,7 +17,9 @@
   - `Flexbox`
   - Grid
 
+<br>
 
+<br>
 
 # 2. CSS Flexible Box Layout
 
@@ -49,7 +51,7 @@
   - 그림의 main, cross 축 방향
   - row 정렬(left 부터 쌓여감, main 기준 정렬)
 
-
+<br>
 
 ## 2.1 Flexbox 시작
 
@@ -62,7 +64,7 @@
 }
 ```
 
-
+<br>
 
 ## 2.2 Flex에 적용하는 속성
 
@@ -77,7 +79,7 @@
 
 ##### :raised_hands: 하나하나 알아봅시다!!
 
-
+<br>
 
 ### 2.2.1 flex-direction
 
@@ -94,7 +96,7 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204023005273.png" alt="image-20210204023005273" style="zoom:70%;" />
 
-
+<br>
 
 ### 2.2.2 justify & align
 
@@ -107,7 +109,7 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204164717701.png" alt="image-20210204164717701" style="zoom:67%;" />
 
-
+<br>
 
 ### 2.2.3 content & items & self
 
@@ -136,7 +138,9 @@
 - align-self
   - auto, flex-start, flex-end, center, baseline, stretch
 
+<br>
 
+<br>
 
 ## 2.2 적용해보기
 
@@ -170,6 +174,8 @@
 
 - 기본값은 `flex-direction: row` 로 왼쪽부터 쌓입니다.
 
+<br>
+
 ### 2. 배치 방향 설정하기 : flex-direction
 
 ```css
@@ -185,6 +191,8 @@
 ```
 
 <img src="210203_2_CSS_layout.assets/image-20210204192404072.png" alt="image-20210204192404072" style="zoom:70%;" />
+
+<br>
 
 ### 3. 메인축으로 정렬하기 : justify-content
 
@@ -203,6 +211,8 @@
 ```
 
 <img src="210203_2_CSS_layout.assets/image-20210204192623411.png" alt="image-20210204192623411" style="zoom:70%;" />
+
+<br>
 
 ### 4. 교차축으로 정렬하기 : align-items/align-self/align-content
 
@@ -237,7 +247,11 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204194945340.png" alt="image-20210204194945340" style="zoom:70%;" />
 
+<br>
+
 ### 5. 기타 : flex-wrap / flex-flow / flex-grow / order
+
+#### flex-wrap
 
 ```css
 .flex-container {
@@ -255,6 +269,10 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204200831207.png" alt="image-20210204200831207" style="zoom:70%;" />
 
+<br>
+
+#### flex-flow
+
 ```css
 .flex-container {
   display: flex;
@@ -264,6 +282,10 @@
 ```
 
 - flex-direction과 wrap를 한번에 적용함
+
+<br>
+
+#### flex-grow
 
 ```css
 /*남은 공간을 나눠가짐*/
@@ -285,6 +307,10 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204202411947.png" alt="image-20210204202411947" style="zoom:70%;" />
 
+<br>
+
+#### order
+
 ```css
 /*순서를 바꿔보자*/
 .item1 {
@@ -300,9 +326,9 @@
 
 <img src="210203_2_CSS_layout.assets/image-20210204202810588.png" alt="image-20210204202810588" style="zoom:70%;" />
 
+<hr>
 
-
-
+<br>
 
 휴...여기까지 플렉스 박스 끝...!!!!
 
