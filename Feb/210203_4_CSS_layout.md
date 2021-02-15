@@ -1,4 +1,4 @@
-col210203_wed
+210203_wed
 
 # CSS layout
 
