@@ -1,0 +1,359 @@
+###### 210322_mon
+
+# DB(1)
+
+<br>
+
+# 1. Model Relationship 1
+
+> 여러 모델간의 관계에대해 배워보겠습니다
+
+## 1.1 Relationship Fields
+
+> 모델간의 관계를 나타내는 필드
+
+- **Many to one (1 : N)** :heavy_check_mark: Today!
+  - ForeignKey()
+
+- Many to Many (M : N)
+
+  - ManyToManyField()
+
+- One to One (1 : 1)
+
+  - OneToOneField()
+
+<br>
+
+<br>
+
+## 1.2 게시글과 댓글의 관계??
+
+#### Article : Comment 
+
+- 1 : N
+- 한 게시글에 여러개의 댓글이 달림
+
+#### 서로에 대한 데이터... 누가 갖고있나?
+
+1. Article이 Comment의 정보를 갖는 경우
+
+   - DB의 한 column에 댓글에 대한 정보 저장
+   - 여러개인 경우 : '1, 2, 3' (댓글 번호가 문자열로 저장)
+
+     ##### :fire:  문제점
+   
+     - 문자열을 변환하는 작업 필요!
+     - DB의 한 col에 하나의 값을 넣는걸 권장..?(이거 들은거같은데 어디적어놨나 안보이넹)
+   
+2. Comment가 Article의 정보를 갖는 경우
+
+   - Article의 유일한 값(pk)를 DB의 Column에 저장
+   - 하나의 데이터만 작성하여 관계를 표현할 수 있음
+
+##### 추가적인 데이터는 `N`이 소유합니다!!
+
+<br>
+
+<br>
+
+# 2. A many to one relationship
+
+## 2.1 Foreign Key (외래 키)
+
+- RDBMS에서 한 테이블의 필드(`comment의 article 필드`) 중 다른 테이블(`article`)의 행을 식별할 수 있는 키
+- 참조하는 테이블에서 참조되는 측의 기본 키(`pk`)를 가짐
+- 하나의 테이블이 여러개의 외래키 포함 가능
+
+- 참조하는 테이블의 행 여러개가, 참조되는 테이블의 동일한 행을 참조할 수 있다
+  - 서로다른 댓글이, 한 게시글에 달릴 수 있다
+- 재귀적 외래키 : 대댓글(나중에 도전해보기)
+  - 참조하는 테이블과 참조되는 테이들이 동일한 경우
+
+### 특징
+
+- 참조 무결성
+  - 키를 사용하여 부모 테이블의 **유일한 값을 참조**
+  - 즉, pk가 아니라도 구현할 수 있지만 유일한 값이어야 한다!!!
+
+> #### 데이터 무결성의 법칙
+>
+> 1. 개체 무결성
+>    - 모든 테이블이 기본 키(primary key)를 가져야한다
+> 2. 참조 무결성
+>    - 모든 외래 키 값은 두 가지 상태 가운데 하나에만 속함
+> 3. 범위 무결성
+>    - 정의된 범위에서 관계형 데이터베이스의 모든 열이 선언되어야 한다
+
+<br>
+
+### Django에서의 Foreign Key
+
+#### ForeignKey()
+
+- 1 : N 을 표현하기 위한 model field
+- 2개의 필수 위치 인자
+  - 참조하는 모델 클래스
+  - on_delete
+
+```python
+class Comment(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+```
+
+#### on_delete
+
+- 참조하는 객체가 사라졌을 때, ForeignKey를 가진 객체를 어떻게 처리할 지 정의
+  - 게시글이 사라진 경우 댓글은 어떻게 할 것인가!
+- 데이터 무결성(Database Integrity)을 위해 매우 중요한 설정
+- 종루가 다양하지만 나머지는 [공식 문서](https://docs.djangoproject.com/en/3.1/ref/models/fields/#arguments)를 참고합시다!
+
+##### 우리가 사용할 것!!
+
+- **CASCADE** 
+  - 부모 객체(참조된 객체)가 삭제된 경우, 이를 참조하는 객체도 삭제
+
+<br>
+
+<br>
+
+## 2.2 댓글모델 구현하기
+
+> 06_django_model_relationship에서 시작합니다
+>
+> project : crud / app : articles, accounts
+
+#### 기본 시작 과정!!
+
+- 가상환경
+
+```shell
+$ python -m venv venv
+$ source venv/Scripts/activate
+```
+
+- 필요한 프로그램 설치
+
+```shell
+$ pip install -r requirements.txt
+```
+
+### 모델 작성
+
+> app의 역할이 나뉘어 있습니다.
+>
+> - accounts : 인증, User
+>
+> - articles : 게시글
+>
+> 따라서 `articles`에서 작성해봅시다
+
+- articles/models.py
+  - 두번째 모델인 Comment를 작성합니다
+
+```python
+class Comment(models.Model):
+    #참조하는 모델의 단수형 소문자 = ForeignKey(to=모델명, on_delete=)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+
+    #댓글에 필요한 column
+    content = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    #함수 호출시 출력되는 형태 지정
+    def __str__(self):
+        return self.content
+```
+
+- migrations
+
+```shell
+$ python manage.py makemigrations
+$ python manage.py migrate
+```
+
+- DB 확인 : `articles_comment` (app이름_모델명)
+  - `article_id` (class변수명_id)으로 table의 field 만들어짐
+
+- articles/admin.py
+  - 관리를 위한 모델등록
+
+```python
+from django.contrib import admin
+from .models import Comment
+
+admin.site.register(Comment)
+```
+
+- 관리자 계정 생성
+
+```shell
+$ python manage.py createsuperuser
+```
+
+<br>
+
+### 댓글 작성 (shell plus)
+
+> django-extensions을 설치한 경우 사용가능!
+>
+> 즉각적인 출력을 확인할 때 사용합니다
+
+- 실행
+
+```shell
+$ python manage.py shell_plus
+```
+
+- 댓글 작성
+
+```shell
+## 댓글 작성
+comment = Comment()  #인스턴스생성
+comment.content = '댓글1'
+comment.save()  #Error, Not Null : 몇 번 게시들에 달린 글인지 정보 필요
+
+## 게시글 생성
+Article.objects.create(title='1번글', content='1번입니다')
+article = Article.objects.get(pk=1)
+
+##article_id 작성
+comment.article = article  #객체를 통째로 전달
+comment.save()  #저장
+```
+
+- 정보 확인
+
+```shell
+comment				#<Comment: 댓글1>
+comment.pk			#1
+comment.content		#'댓글1'
+comment.article		#<Article: Article object (1)>
+comment.article_id	#1
+comment.article.pk	#1
+comment.article_pk	#AttributeError, 해당 column 존재X
+```
+
+<br>
+
+<br>
+
+## 2.3 1:N model manager
+
+> 이전까지는 object라는 모델 매니저를 사용했죠!
+
+### 참조
+
+- Comment(N)가 Article(1) 참조
+  - article
+
+```python
+Comment.article
+```
+
+### 역참조
+
+- Article(1)이 Comment(N)를 참조
+  - comment_set
+  - `모델이름_set` 형식의 manager
+
+```python
+article.comment_set.all()
+```
+
+<br>
+
+### 역참조 사용(shell_plus)
+
+> 게시글에 어떤 댓글이 달렸는지 확인하기위해 사용합니다!
+
+- QuerySet의 반환값 존재
+
+```shell
+article = Article.objects.get(pk=1)
+article  #<Article: Article object (1)>
+
+article.comment_set.all()  #<QuerySet [<Comment: 댓글 1>, <Comment: 댓글2>]>
+```
+
+- 변수에 담아 for문같은데 사용 가능
+
+```shell
+comments = article.comment_set.all()
+comments  #<QuerySet [<Comment: 댓글 1>, <Comment: 댓글2>]>
+```
+
+<br>
+
+<br>
+
+## 2.4 ForegnKey's Arguments
+
+### related_name
+
+- 역참조 manager( _set manager) 변경할 이름 설정
+- `M:N 관계`에서 사용하는 상황 반드시 존재!! (다음번에 사용하자)
+
+#### 예시
+
+- 바꾸기 전 : article.comment_set.all()
+- 바꾼 후 : article.comments.all()
+- 한 번 바꾸면 이전의 값은 사용할 수 없습니다
+
+```python
+class Comment(model.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+```
+
+<br>
+
+<br>
+
+# 3. 댓글 CRD
+
+### 댓글 작성 Form 만들기
+
+- articles/forms.py
+
+  ##### :fire: fields = '\_\_all\_\_' 의 문제점
+
+  - 댓글 작성 시, 어떤 글에 댓글을 작성할 지 선택할 수 있다 (너무 많은 권한)
+
+  #####  :four_leaf_clover: exclude = ('article',) 로 해결
+  
+  - 전체 field 중 article만 제외
+
+```python
+from .models import Comment
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        # fields = '__all__'
+        exclude = ('article',)
+```
+
+- articles/views.py - detail
+- 보통 게시글 아래에 작성하므로, detail에서 form을 보여주자
+
+```python
+from .forms import CommentForm
+
+@require_safe
+def detail(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    comment_form = CommentForm()  #빈 form 전달
+    context = {
+        'article': article,
+        'comment_form': comment_form,
+    }
+    return render(request, 'articles/detail.html', context)
+```
+
+- templates/articles/detail.html
