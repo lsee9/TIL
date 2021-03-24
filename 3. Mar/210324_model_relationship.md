@@ -316,6 +316,12 @@ class Comment(model.Model):
 
 # 3. 댓글 CRD
 
+## 댓글 작성 (Create)
+
+> 댓글 작성하는 form을 detail 페이지에서 보여줍니다
+>
+> 작성된 게시글을 처리합니다
+
 ### 댓글 작성 Form 만들기
 
 - articles/forms.py
@@ -340,7 +346,7 @@ class CommentForm(forms.ModelForm):
 ```
 
 - articles/views.py - detail
-- 보통 게시글 아래에 작성하므로, detail에서 form을 보여주자
+  - 보통 게시글 아래에 작성하므로, detail에서 form을 보여주자
 
 ```python
 from .forms import CommentForm
@@ -357,3 +363,202 @@ def detail(request, pk):
 ```
 
 - templates/articles/detail.html
+  - 아직 create하는 부분은 만들지 않았으므로 action은 비워줍니다
+  - comment_form.as_p
+    - p태그로 감싸지면서 제출 버튼이 아래로 내려가 빼주었습니다
+
+```html
+{% block content %}
+  <h2>DETAIL</h2>
+  ...
+  <hr>
+  <h4>Comment</h4>
+  <form action="#" method="POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
+```
+
+<br>
+
+### 댓글 처리하기
+
+- articles/urls.py
+  - 댓글 작성에 필요한 것
+    - 댓글 내용(form으로 전달) + 몇번 글의 댓글(url로 article_pk 받음)
+
+```python
+urlpatterns = [
+   ...
+    path('<int:article_pk>/comments/', views.comments_create, name='comments_create'),
+]
+```
+
+- templates/articles/detail.html
+  - form의 action작성
+
+```html
+<form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+```
+
+- articles/views.py - comments_create
+
+  - POST만 처리
+
+    - GET : detail 에서 form을 보여주는 역할을 수행해줍니다
+    - POST : 댓글을 작성해서 처리하는 경우
+
+    ##### :fire:`comment_form.save()`  의 문제점
+
+    - IntegrityError : NOT NULL ~
+    - article_id가 빈 상태 입니다 (form에서 article을 제외했기 때문)
+
+    #####  :four_leaf_clover: `comment_form.save(commit=False)` 로 해결
+
+    - DB에 입력하지 않은 상태로 대기한체 인스턴스 반환
+    - 추가적인 내용을 작성할 시간을 줍니다
+
+```python
+@require_POST        
+def comments_create(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    comment_form = CommentForm(request.POST)  #form에 작성한 정보
+    if comment_form.is_valid():  #유효성 검사
+        comment = comment_form.save(commit=False)
+        comment.article = article  #객체 전달
+        comment.save()  #저장
+        # detail로 재요청
+        return redirect('articles:detail', article.pk)
+    ## 유효성 검사 통과 못한 경우
+    context = {
+        'article': article,
+        'comment_form': comment_form,
+    }
+    return render(request, 'articles/detail', context)
+```
+
+#### :mag_right: redirect VS render
+
+> 차이를 알고 적절하게 사용합시다!
+
+- redirect
+  - 해당 주소로 새롭게 요청을 보내는 것
+- render
+  - 에러메세지(유효성 검사에 실패한 경우)를 포함한 템플릿을 보냄
+  - 현재의 정보를 함께 보내는 느낌이랄까..?(이건 그냥 내 생각...)
+
+<br>
+
+<br>
+
+## 댓글 조회 (Read)
+
+> detail 페이지 댓글 작성 위에 쌓아보겠습니다
+
+- articles/views.py - detail
+  - 모든 댓글 정보를 전달합니다
+
+```python
+@require_safe
+def detail(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    comment_form = CommentForm()
+    comments = article.comment_set.all()  #모든 댓글 정보 전달
+    context = {
+        'article': article,
+        'comment_form': comment_form,
+        'comments': comments,
+    }
+    return render(request, 'articles/detail.html', context)
+```
+
+- templates/articles/detail.html
+  - for문을 이용해 댓글을 한 줄씩 출력합니다
+  - comment.content로 내용을 출력함을 명시해줍니다
+
+```html
+{% block content %}
+  ...
+  <hr>
+  <h4>Comment</h4>
+  <ul>
+    {% for comment in comments %}
+      <li>{{ comment.content }}</li>
+    {% endfor %}
+  </ul>
+  ...
+{% endblock %}
+```
+
+<br>
+
+<br>
+
+## 댓글 삭제 (Delete)
+
+> 댓글을 삭제하려면?? 몇번 댓글인지 알아야한다!
+>
+> 댓글을 삭제하면 여전히 detail 페이지... 그럼 몇번 게시글인지도 알아야한다!!
+
+- articles/urls.py
+  - 몇번 게시글인지, 몇번 댓글인지 정보가 필요하다
+  - url에도 명시적으로 나타나는 것이 좋다!
+
+```python
+urlpatterns = [
+    ...
+    path('<int:article_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
+]
+```
+
+- articles/views.py - comments_delete
+  - 삭제하는 POST 요청에만 반응합니다
+  - 해당 comment를 가져와 삭제합니다
+
+```python
+from .models import Comment
+
+@require_POST
+def comments_delete(request, article_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    comment.delete()
+    return redirect('articles:detail', article_pk)
+```
+
+- templates/articles/detail.html
+
+```html
+{% block content %}
+  ...
+  <hr>
+  <h4>Comment</h4>
+  <ul>
+    {% for comment in comments %}
+      <li>
+        {{ comment.content }}
+          
+        <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="DELETE">
+        </form>
+          
+      </li>
+    {% endfor %}
+  </ul>
+  ...
+{% endblock %}
+
+```
+
+<br>
+
+<br>
+
+> #### 댓글 수정
+>
+> - 수정은 페이지 전환없이 수정할 부분만 활성화되는게 보통입니다
+> - 현재까지 배운 것은 모두 페이지 전환이 이뤄집니다
+> - 이를 위해서는 JS(Javascript)가 필요합니다!
+> - 따라서 수정은 구현하지 않습니다
