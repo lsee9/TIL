@@ -556,9 +556,119 @@ def comments_delete(request, article_pk, comment_pk):
 
 <br>
 
-> #### 댓글 수정
->
+#### 댓글 수정
+
 > - 수정은 페이지 전환없이 수정할 부분만 활성화되는게 보통입니다
-> - 현재까지 배운 것은 모두 페이지 전환이 이뤄집니다
+>- 현재까지 배운 것은 모두 페이지 전환이 이뤄집니다
 > - 이를 위해서는 JS(Javascript)가 필요합니다!
 > - 따라서 수정은 구현하지 않습니다
+
+<br>
+
+<hr>
+
+<br>
+
+# 4. Comment CRD 추가사항
+
+> 기능적으로 추가하면 좋을 부분을 보완해봅시다!
+
+## 4.1 댓글 작성, 삭제 : 로그인한 사람만 가능
+
+#### login_required를 쓸까요??
+
+- 현재 required_POST 사용!!
+
+  ##### :fire: 두개를 같이 쓰면 어색함이 있답니다
+
+  - login_required
+    - 로그인 안하고 접근시, next parameter와 함께 login 페이지로!
+    - 로그인 성공시, next에 있는 url을 시도(그 전에 시도했던 url)
+    - 이때!!! 이는 GET요청입니다
+    - 그래서 required_POST에 막혀 **405메세지**를 만납니다(흐름상 막힘)
+  - 따라서 GET method를 처리할 수 있는 함수인 경우만 두개를 같이 쓸 수 있습니다
+
+  ##### :four_leaf_clover: 해결방법?
+
+  - 둘 중에 하나를 선택하고, 한가지 동작은 내부에서 처리할 수 있도록 해야겠죠?
+  - 남기고싶은걸 선택해서 처리해봅시다
+
+#### require_POST 를 남기고 작성해보자
+
+- articles/views.py - comments_create
+  - 로그인 안한 유저는 로그인 페이지로 보내겠습니다
+
+```python
+@require_POST        
+def comments_create(request, article_pk):
+    if request.user.is_authenticated:
+        #댓글 작성 처리하는 부분
+        return render(request, 'articles/detail', context)
+    return redirect(request, 'accounts:login')  #로그인 안한경우, 로그인페이지로 재요청
+```
+
+- articles/views.py - comments_delete
+  - 위에처럼 동일하게 로그인 페이지로 가도 됩니다
+  - 여기서는 detail 페이지를 그대로 보여주겠습니다
+
+```python
+@require_POST
+def comments_delete(request, article_pk, comment_pk):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        comment.delete()
+    return redirect('articles:detail', article_pk)
+```
+
+#### 에러페이지를 보여주고 싶은 경우
+
+> https://www.django-rest-framework.org/api-guide/status-codes/
+
+- http status code
+  - `401_UNAUTHORIRED`를 보내면 됩니다
+  - 정확한 상태 코드가 없는경우 http 응답을 반환하는 방식을 사용합니다
+
+```python
+from django.http import HttpResponse  #http 응답을 반환
+
+@require_POST
+def comments_create(request, pk):
+    if request.user.is_authenticated:
+        #댓글 작성 처리하는 부분
+        return render(request, 'articles/detail.html', context)
+    return HttpResponse(status=401)  #화면에 401 에러를 표시해줍니다
+```
+
+<br>
+
+## 4.2 댓글 개수를 출력하자
+
+#### 개수 출력하는 방법
+
+> 댓글의 개수가 더 많아진다면 첫번째, 두번째 사용하는게 더 낫다고 합니다
+
+- `{{ comment|length }}`
+- `{{ article.comment_set.all|length }}`
+
+- `{{ comments.count }}`
+
+#### 댓글이 없다면 없다는 메세지 띄워주기
+
+- templates/articles/detail.html
+
+```html
+<hr>
+<h4>Comment</h4>
+<p>{{ comments|length }}개의 댓글이 있습니다.</p>
+<ul>
+    {% for comment in comments %}
+        <li>
+            {{ comment.content }}
+            <!-- form부분 -->
+        </li>
+    {% empty %}
+    	<p>아직 댓글이 없습니다...</p>
+    {% endfor %}
+</ul>
+```
+
