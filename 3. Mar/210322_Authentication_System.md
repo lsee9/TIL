@@ -248,7 +248,11 @@ urlpatterns = [
 - accounts/views.py - login
   - Built-in 함수인 login을 사용합니다 (함수와 이름 겹치면 안되니까 auth_login으로 사용)
     - session을 만듦(sessionid를 session table에 기록)
-    - sessionid로 쿠키에 심으라는 응답 마련
+    - sessionid로 쿠키에 심으라는 응답 마련'
+  - ger_user
+    - user정보를 반환
+    - request에 user정보가 존재하며, 이를 가져오기 위해 사용!
+    - form.user로 사용하지 않는건 form자체에 user 변수가 존재하는게 아니라 request로 user정보가 통째로 들어가있디 때문인듯!!
 
 ```python
 def login(request):
