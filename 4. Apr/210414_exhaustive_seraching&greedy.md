@@ -223,3 +223,13 @@ def sequential_search(arr, k):
 
 # 3. 조합적 문제 (Combinational Problems)
 
+> 정말 중요한 순열, 조합, 부분집합을 알아봅시다!
+
+## 3.1 순열 (Permutation)
+
+- 서로 다른 것들 중 몇 개를 뽑아 **한 줄로 나열하는 것**
+  - 즉, 순서의 영향을 받는 다는 것을 의미합니다!
+- 서로 다른 n개 중 r개를 택하는 순열
+  - <sub>n</sub>*P*<sub>r</sub>
+  - <sub>n</sub>*P*<sub>r</sub> = *n* x (*n* - 1) x (*n* - 2) x ... x (*n* - *r* + 1)
+
