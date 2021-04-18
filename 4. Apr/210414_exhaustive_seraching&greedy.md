@@ -227,9 +227,24 @@ def sequential_search(arr, k):
 
 ## 3.1 순열 (Permutation)
 
+### 개념
+
 - 서로 다른 것들 중 몇 개를 뽑아 **한 줄로 나열하는 것**
+
   - 즉, 순서의 영향을 받는 다는 것을 의미합니다!
+
 - 서로 다른 n개 중 r개를 택하는 순열
+
   - <sub>n</sub>*P*<sub>r</sub>
-  - <sub>n</sub>*P*<sub>r</sub> = *n* x (*n* - 1) x (*n* - 2) x ... x (*n* - *r* + 1)
+
+  - <sub>n</sub>*P*<sub>r</sub> = *n* x (*n* - 1) x (*n* - 2) x ... x (*n* - *r* + 1) = *n*! / (*n* - *r*)!
+
+    ###### 처음에는 n개의 선택지, 하나를 선택하면 선택지가 n - 1로 줄어듦
+
+    ###### 따라서 r번째는 n - r + 1의 선택지!!
+
+    ###### 예) 6개중 2개 뽑는다 = <sub>6</sub>*P*<sub>2</sub> = 6 x 5 = 6 x (6 - 2 + 1)
+
+- Factorial
+  - <sub>n</sub>*P*<sub>n</sub> = n! = *n* x (*n* - 1) x (*n* - 2) x ... x 2 x 1
 
