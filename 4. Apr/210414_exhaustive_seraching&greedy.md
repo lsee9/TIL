@@ -1,4 +1,4 @@
-###### 210416_wed
+###### 210414_wed
 
 ##### APS 응용
 
@@ -246,8 +246,9 @@ def sequential_search(arr, k):
     ###### 예) 6개중 2개 뽑는다 = <sub>6</sub>*P*<sub>2</sub> = 6 x 5 = 6 x (6 - 2 + 1)
 
 - Factorial
-  - <sub>n</sub>*P*<sub>n</sub> = n! = *n* x (*n* - 1) x (*n* - 2) x ... x 2 x 1
-
+  
+- <sub>n</sub>*P*<sub>n</sub> = n! = *n* x (*n* - 1) x (*n* - 2) x ... x 2 x 1
+  
 - 다수의 알고리즘 문제들은 순서화된 요소들의 집합에서 최선의 방법을 찾는 것과 관련이 있다
 
   - 예) TSP (Traveling Salesman Problem)
