@@ -147,6 +147,12 @@ window.document.title  //해당 document에서 title을 출력해줌
 - getElementsByTagName() => tag 사용해서 선택
 - getElementsByClassName() => class 사용해서 선택
 
+```js
+
+```
+
+
+
 <br>
 
 ### 선택 메서드별 반환 타입
@@ -193,9 +199,94 @@ window.document.title  //해당 document에서 title을 출력해줌
   - DOM이 변경되어도 `collection 내용에는 영향 X`
   - querySelectorAll()의 반환 NodeList만 static
 
+<br>
 
+<br>
 
+## 3.2 DOM 변경
 
+> 선택했다면 조작해야합니다!
+
+### 변경 관련 메서드
+
+#### create
+
+- Document.**createElement()**
+  - 주어진 태그명을 사용해 HTML요소를 만들어 반환
+  - 예) createElement('h1') => h1 tag 생성
+
+#### add
+
+- ParentNode.**append()**
+  - 특정 부모 노드의 자식 노드 리스트 중 **마지막 자식 다음**에 `Node 객체 나 DOMString` 삽입 (반환값 없음)
+  - **`여러 개`**의 Node 객체, DOMString 추가 가능
+  - 예) ul tag안에 li태그 존재 => ul.append('li') 하면 마지막에 li추가
+- Node.**appendChild()**
+  - **`한 노드`**를 특정 부모 노드의 자식 노드 리스트 중 **마지막 자식**으로 삽입 (Node만 추가, 즉 문자열 객체만 넣을 수 있다)
+  - (참고) 만약 주어진 노드가 이미 문서에 존재하는 다른 노드를 참조한다면 새로운 위치로 이동
+
+#### delete
+
+- childNode.**remove()**
+  - 이를 포함하는 트리로부터 특정 객체 제거
+  - 예) li.remove()
+- Node.**removeChild()**
+  - DOM에서 자식 노드를 제거하고, 제거된 `노드를 반환` (변수로 사용 가능)
+  - Node는 인자로 들어가는 자식 노드의 부모 노드
+  - 예) ul.removeChild('li')
+
+#### element create & read
+
+- Element.**setAttribute(name, value)**
+  - 지정된 요소의 값을 설정 (생성)
+  - 속성이 이미 존재하면 값을 업데이트, 그렇지 않으면 지정된 이름과 값으로 새 속성 추가
+  - 예) \<h1 name="value"\>Hello\</h1\> : 태그 안에 들어가는게 속성!!!
+- Element.**getAttribute()**
+  - 해당 요소의 지정된 값(문자열)을 반환 (속성을 조회!)
+  - 인자는 값을 얻고자 하는 속성의 이름 (위의 메서드에서 name에 해당)
+
+<br>
+
+### 변경 관령 속성 (property)
+
+> 이제까지 본 건 메서드!! 
+
+- Node.**innerText**
+
+  - 노드와 그 자손의 `텍스트 컨텐츠`(DOMString)를 표현 
+
+    - 해당 요소 내부의 raw text (예) \<h1\>Hi\</h1\> 에서 Hi를 의미)
+
+    - 사람이 읽을 수 있는 요소만 남김
+
+  - 즉, 줄 바꿈을 인식하고 숨겨진 내용을 무시하는 등 최종적으로 스타일링이 적용된 모습으로 표현
+
+- Element.**innerHTML**
+  - 요소(element) 내에 포함된 HTML 마크업을 반환
+  - XSS공격에 취약점이 있으므로 사용시 주의
+  
+  > **XSS (Cross-site scripting)**
+  >
+  > - 공격자가 웹 사이트 클라이언트 측 코드에 악성 스크립트를 삽입해  공격하는 방법
+  > - 이 코드의 실행은 피해자가하며(공격자가 직접 공격 X) 공격자가 엑세스 제어를 우회하고 사용자를 가장 할 수 있도록 함 (csrf 공격과 유사)
+  > - 예)
+  >   - 게시판, 메일 등 악성 자바스크립트 코드를 삽입 해 개발자가 고려하지 않는 기능이나 공격이 작동
+  >   - 공격에 성공하면 사용자의 쿠키나ㅏ 세션 등 민감한 정보를 탈취
+
+```javascript
+```
+
+<br>
+
+##### 여기까지는 DOM조작의 완전 기본!! 
+
+##### JS로만 할 수 있는걸 배워봅시다 :golfing_man:
+
+<br>
+
+<br>
+
+# 4. Event :gift:
 
 
 
