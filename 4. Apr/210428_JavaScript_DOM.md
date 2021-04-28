@@ -92,3 +92,16 @@ window.document.title  //해당 document에서 title을 출력해줌
 - **DOM 조작 순서** :cherries: :cherries: :cherries: 2가지만 기억!!
   1. 선택 (select)
   2. 변경 (manupulation)
+
+#### Document 위치
+
+
+
+#### DOM 관련 객체 상속 구조
+
+
+
+
+
+## 3.1 DOM 변경
+
