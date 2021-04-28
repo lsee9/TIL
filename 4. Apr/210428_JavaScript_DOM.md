@@ -288,5 +288,29 @@ window.document.title  //해당 document에서 title을 출력해줌
 
 # 4. Event :gift:
 
+> 동적으로 변하는 화면을 구성하고 싶다구요??
+>
+> Event... 잘만 쓰면 정말 멋지게 만들수 있습니다!!!
 
+### Event
+
+- `네트워크 활동` 혹은 `사용자와의 상호작용` 같은 **사건의 발생**을 알리기 위한 객체
+- 이벤트의 발생
+  - 마우스 클릭, 키보드 누름 등 사용자 행동에 의해 발생
+  - 특정 메서드를 호출(HTMLElement.clikc()) 하여 프로그래밍적으로도 만들어낼 수 있음
+- 이벤트 처리기 (Event-handlers)
+  - **EventTarget.addEventListener()**
+  - 해당 메서드를 통해 다양한 요소에서 이벤트를 붙일 수 있다
+  - removeEventListener()를 통해 이벤트 제거 가능
+
+### Event 기반 인터페이스
+
+- AnimationEvent, ClipboardEvent, DragEvent 등 이벤트의 종슈, 객체가 여러개
+- 그 중 `UIEvent`
+  - 간단한 사용자 인터페이스 이벤트
+  - Event(최상위)의 상속을 받음
+  - MouseEvent, KeyboardEvent, InputEvent, FocusEvent 등의 부모 객체 역할
+  - [UIEvent MDN](https://developer.mozilla.org/en-US/docs/Web/API/UIEvent) :point_left:공식문서 참고
+
+ ​
 
