@@ -128,12 +128,19 @@ window.document.title  //해당 document에서 title을 출력해줌
 
 ### 선택 관련 메서드
 
+> 선택을 어떻게 할까요??
+>
 > 여러가지가 있지만 체크해둔 2가지만 알아도 될 듯합니다!!!
 >
 > 가장 많이 쓰고, 모든 경우에 사용 가능!
 
 - Document.**querySelector()** :heavy_check_mark:
-  - 제공한 선택자와 일치하는 `element 하나 선택`
+  - 앞의 문서에서 제공한 선택자(()안에 인자로 전달)와 일치하는 `element 하나 선택`
   - 제공한 CSS selector를 `만족하는 첫번째 element 객체`를 반환 (없다면 null)
-
-- 
+- Document.**querySelectorAll()** :heavy_check_mark:
+  - 앞의 문서에서 제공한 선택자와 일치하는 `여러 element를 선택`
+  - 매칭할 하나 이상의 셀렉터를 포함하는 유효한 CSS selector를 인자(문자열)로 받음(예) 'div > li')
+  - 지정된 selector에 일치하는 `NodeList`를 반환
+    - 다중 객체를 NodeList라는 이름의 객체로 반환
+    - objects.all()해서 QuerySet 받는것과 유사!
+- getElementById()
