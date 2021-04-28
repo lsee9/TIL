@@ -101,7 +101,39 @@ window.document.title  //해당 document에서 title을 출력해줌
 
 
 
+<br>
 
+### 잠깐!!! CSS Selector... 기억하니..? :scream:
 
-## 3.1 DOM 변경
+> selector를 사용해서 선택, 변경 해줘야하기때문에!!! 이를 정리하고 갑시다
 
+- **class** selector
+  - `마침표(.)`로 시작!
+  - .class_name
+- **id** selector
+  - `#`문자로 시작, 문서당 한 번만 사용할 수 있다
+  - #id_name
+- **자손** 결합자
+  - selectorA `공백` selectorB
+  - selectorA의 후손 요소(level n, 아래에 있는 모든) 중 selectorB와 일치하는 요소 선택!!
+- **자식** 결합자
+  - selectorA `>` selectorB
+  - selectorA의 모든 자식 요소(level 1, 바로 아래) 중 selectorB와 일치하는 요소 택
+- **tag**
+  - h1, div등 HTML tag
+
+<br>
+
+## 3.1 DOM 선택
+
+### 선택 관련 메서드
+
+> 여러가지가 있지만 체크해둔 2가지만 알아도 될 듯합니다!!!
+>
+> 가장 많이 쓰고, 모든 경우에 사용 가능!
+
+- Document.**querySelector()** :heavy_check_mark:
+  - 제공한 선택자와 일치하는 `element 하나 선택`
+  - 제공한 CSS selector를 `만족하는 첫번째 element 객체`를 반환 (없다면 null)
+
+- 
