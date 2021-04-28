@@ -130,9 +130,9 @@ window.document.title  //해당 document에서 title을 출력해줌
 
 > 선택을 어떻게 할까요??
 >
-> 여러가지가 있지만 체크해둔 2가지만 알아도 될 듯합니다!!!
+> 여러가지가 있지만 체크해둔 `2가지`만 알아도 될 듯합니다!!!
 >
-> 가장 많이 쓰고, 모든 경우에 사용 가능!
+> 가장 많이 쓰고, `모든 경우(id, class, tag)에 사용 가능`!! 구체적이고 유연한 선택이 가능합니다
 
 - Document.**querySelector()** :heavy_check_mark:
   - 앞의 문서에서 제공한 선택자(()안에 인자로 전달)와 일치하는 `element 하나 선택`
@@ -143,4 +143,59 @@ window.document.title  //해당 document에서 title을 출력해줌
   - 지정된 selector에 일치하는 `NodeList`를 반환
     - 다중 객체를 NodeList라는 이름의 객체로 반환
     - objects.all()해서 QuerySet 받는것과 유사!
-- getElementById()
+- getElementById() => HTML id를 사용해서 선택
+- getElementsByTagName() => tag 사용해서 선택
+- getElementsByClassName() => class 사용해서 선택
+
+<br>
+
+### 선택 메서드별 반환 타입
+
+- **단일 element**
+  - getElementById()
+    - id는 하나만 존재하기때문!
+  - querySelector()
+    - 여러개인 경우 가장 앞의 것 출력
+
+- **HTMLCollection**
+  - getElementsByTagName()
+  - getElementsByClassName()
+- **NodeList**
+  - querySelectorAll()
+
+<br>
+
+### HTMLCollection & NodeList
+
+> 여러 element를 반환하는데... type이 다르다구..???
+
+- 둘 다 배열과 같이 각 항목을 접근하기 위한 `인덱스를 제공`(유사 배열)
+- **HTMLCollection**
+  - name, id, 인덱스 속성으로 각 항목들에 접근 가능
+- **NodeList**
+  - `인덱스 번호로만` 각 항목들에 접근 가능
+  - 단, HTMLCollection과 달리 배열에서 사용하는 for each 함수 및 `다양한 메서드 사용 가능`(좀 더 유연하게 사용 가능)
+
+- 둘 다 **Live Collection**으로 DOM의 변경 사항을 실시간으로 반영!!!
+- BUT **querySelectorAll()**에 의해 반환되는 NodeList는 **Static Collection**
+
+###### :see_no_evil: 새로운 개념이 계속.... 그치만 알아야합니다...ㅜ
+
+<br>
+
+### Collection
+
+- **Live Collection**
+  - 문서가 바뀔 때 `실시간으로 업데이트`
+  - DOM의 변경사항을 실시간으로 collection에 반영
+  - 예) HTMLCollection, NodeList
+- **Static Collection (non-live)**
+  - DOM이 변경되어도 `collection 내용에는 영향 X`
+  - querySelectorAll()의 반환 NodeList만 static
+
+
+
+
+
+
+
