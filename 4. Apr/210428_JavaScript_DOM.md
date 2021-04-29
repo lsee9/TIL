@@ -266,6 +266,17 @@ window.document.title  //해당 document에서 title을 출력해줌
   - 주어진 태그명을 사용해 HTML요소를 만들어 반환
   - 예) createElement('h1') => h1 tag 생성
 
+##### 예시
+
+```javascript
+const ul = document.createElement('ul')  //ul tag 생성
+const li1 = document.createElement('li')  //li tag 생성
+const li2 = document.createElement('li')
+const li3 = document.createElement('li')
+```
+
+
+
 #### add
 
 - ParentNode.**append()**
@@ -276,6 +287,16 @@ window.document.title  //해당 document에서 title을 출력해줌
   - **`한 노드`**를 특정 부모 노드의 자식 노드 리스트 중 **마지막 자식**으로 삽입 (Node만 추가, 즉 문자열 객체만 넣을 수 있다)
   - (참고) 만약 주어진 노드가 이미 문서에 존재하는 다른 노드를 참조한다면 새로운 위치로 이동
 
+##### 예시
+
+```js
+const body = document.querySelector('body')
+body.appendChild(ul)  //body의 자식으로 ul태크 넣음(하나만 넣는)
+ul.append(li1, li2, li3)  //ul태그 아래에 3개의 li 태그 넣음(여러개 넣는)
+```
+
+
+
 #### delete
 
 - childNode.**remove()**
@@ -285,6 +306,15 @@ window.document.title  //해당 document에서 title을 출력해줌
   - DOM에서 자식 노드를 제거하고, 제거된 `노드를 반환` (변수로 사용 가능)
   - Node는 인자로 들어가는 자식 노드의 부모 노드
   - 예) ul.removeChild('li')
+
+##### 예시
+
+```js
+ul.removeChild(li1)  //ul의 자식인 li1 태그 삭제
+ul.remove()  //ul 태그 직접 삭제
+```
+
+
 
 #### element create & read
 
@@ -309,8 +339,14 @@ window.document.title  //해당 document에서 title을 출력해줌
     - 해당 요소 내부의 raw text (예) \<h1\>Hi\</h1\> 에서 Hi를 의미)
 
     - 사람이 읽을 수 있는 요소만 남김
-
   - 즉, 줄 바꿈을 인식하고 숨겨진 내용을 무시하는 등 최종적으로 스타일링이 적용된 모습으로 표현
+
+
+```js
+li1.innerText = 'First'
+```
+
+
 
 - Element.**innerHTML**
   - 요소(element) 내에 포함된 HTML 마크업을 반환
@@ -325,6 +361,9 @@ window.document.title  //해당 document에서 title을 출력해줌
   >   - 공격에 성공하면 사용자의 쿠키나ㅏ 세션 등 민감한 정보를 탈취
 
 ```javascript
+//2개의 작성 결과를 비교해보세요!
+li2.innerText = '<strong>Second<strong>'  //<strong>Second<strong>, 문자열로 인식
+li3.innerText = '<strong>Third<strong>'  // Third, 마크업 반환
 ```
 
 <br>
