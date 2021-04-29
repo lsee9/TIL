@@ -137,12 +137,63 @@ window.document.title  //해당 document에서 title을 출력해줌
 - Document.**querySelector()** :heavy_check_mark:
   - 앞의 문서에서 제공한 선택자(()안에 인자로 전달)와 일치하는 `element 하나 선택`
   - 제공한 CSS selector를 `만족하는 첫번째 element 객체`를 반환 (없다면 null)
+
+##### 예시
+
+```html
+<body>
+    <h1 id="header">Header</h1>
+    <h2 id="sub-header">SubHeader</h2>
+    <h2 id="mini-header">MiniHeader</h2>
+    <script>
+    	const mainHeader = document.querySelector('h1')
+        const subHeader = document.querySelector('#sub-header')
+        const miniHeader = document.querySelector('#mini-header')
+    </script>
+</body>
+```
+
+```html
+<body>
+    <ul>
+        <li class='frame'>frame1</li>
+        <li class='frame'>frame2</li>
+        <li class='frame'>frame3</li>
+    </ul>
+    <script>
+    	const selectDescendant = document.querySelector('body li')  //body 아래의 모든 li (자손)
+        const selectChild = document.querySelector('body > ul')  //body 바로 아래 ul (자식)
+    </script>
+</body>
+```
+
+
+
 - Document.**querySelectorAll()** :heavy_check_mark:
   - 앞의 문서에서 제공한 선택자와 일치하는 `여러 element를 선택`
   - 매칭할 하나 이상의 셀렉터를 포함하는 유효한 CSS selector를 인자(문자열)로 받음(예) 'div > li')
   - 지정된 selector에 일치하는 `NodeList`를 반환
     - 다중 객체를 NodeList라는 이름의 객체로 반환
     - objects.all()해서 QuerySet 받는것과 유사!
+
+##### 예시
+
+```html
+<body>
+    <ul>
+        <li class='frame'>frame1</li>
+        <li class='frame'>frame2</li>
+        <li class='frame'>frame3</li>
+    </ul>
+    <script>
+    	const frameLi = document.querySelectorAll('.frame')  //3개 li태그
+        const frameOne = document.querySelector('.frame')  //첫번째 li 선택
+    </script>
+</body>
+```
+
+
+
 - getElementById() => HTML id를 사용해서 선택
 - getElementsByTagName() => tag 사용해서 선택
 - getElementsByClassName() => class 사용해서 선택
@@ -314,3 +365,24 @@ window.document.title  //해당 document에서 title을 출력해줌
 
  ​
 
+##### 이벤트... 왜 필요한데??? :open_mouth:
+
+- 웹페이지에서 검색을 한다던지... 클릭을 한다던지... 뭔가 동작을 했을때, 하는 행동에 맞춰 대응이 필요합니다
+
+- 즉, 클라이언트가 하는 하나하나의 이벤트를 캐치할 필요가 있습니다!!
+
+  **Event** 란??
+
+  - <u>ㅁㅁ하면</u> oo한다 :heavy_check_mark:밑줄에 해당하는게 이벤트
+  - <u>특정 이벤트가 발생 하면</u> 할 일을 **등록**한다! :heavy_check_mark: 등록은?? 이벤트 핸들러!!
+
+<br>
+
+### Event Handler
+
+- EventTarget.**addEventListener()**
+- 지정한 이벤트가 대상에 전달될 때마다 `호출할 함수를 설정` 합니다
+- `이벤트를 지원하는 모든 객체`(Element, Document, Window 등)를 대상으로 지정 가능합니다
+- target.addEventListener(type, listener[, options])
+  - `type` : 반응할 이벤트 유형 (대소문자 구분 문자열)
+  - `listener` : 지정된 타입의 이벤트가 발생 했을 때 알림을 받는 객체
