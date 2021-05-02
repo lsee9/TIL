@@ -98,6 +98,74 @@ const API_KEY = 'MYKEY'
   - 변수 **재선언 불가**
   - 블록 스코프
 
+##### 용어 익히기 :jack_o_lantern:
+
+- 선언 (Declaration)
+  - <u>변수를 생성</u>하는 행위 또는 시점
+- 할당 (Assignment)
+  - 선언된 변수에 <u>값을 저장</u>하는 행위 또는 시점
+- 초기화 (Initialization)
+  - 선언된 병수에 <u>처음으로 값을 저장</u>하는 행위 또는 시점
+
+```js
+let flag  //선언
+console.log(flag)  // undefined
+
+flag = 1  //할당
+console.log(flag)  // 1
+
+let bar = 0  //선언 + 할당
+console.log(bar)  // 0
+```
+
+<br>
+
+#### 비교
+
+- 재할당
+
+  - **let** : 재할당 `가능`
+
+  ```js
+  let number = 10  //선언 및 초기값 할당
+  number = 10		 //재할당
+  
+  console.log(number)  //10
+  ```
+
+  - **const** : 재할당 `불가`
+
+  ```js
+  const number = 10  //선언 및 초기값 할당
+  number = 10		   // 재할당 불가
+  
+  => Uncaught TypeError: Assignment to constant variable.
+  ```
+
+- 재선언
+
+  - **let** : 재선언 불가
+
+  ```js
+  let number = 10  //선언 및 초기값 할당
+  let number = 50	 // 재선언 불가
+  
+  => Uncaught SyntaxError: Identifier 'number' has already been declared
+  ```
+
+  - **const** : 재선언 `불가`
+
+  ```js
+  const number = 10  //선언 및 초기값 할당
+  const number = 50  //재선언 불가
+  
+  => Uncaught SyntaxError: Identifier 'number' has already been declared
+  ```
+
+- 블록스코프
+
+
+
 
 
 
