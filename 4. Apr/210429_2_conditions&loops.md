@@ -5,8 +5,6 @@
 <hr>
 
 
-
-
 ###### 오늘의 목차 :musical_note:
 
 ### 조건문과 반복문
@@ -29,8 +27,9 @@
   - 조건 표현식의 결과값을 Boolean 타입으로 변환 후 참/거짓을 판단
 - **switch statement**
   - 조건 표현식의 결과값이 어느 값(case)에 해당하는지 판별
+  - 주로 특정 변수의 값에 따라 조건을 분기할 때 활용 (조건이 많아질  경우 if보다 가독성이 나을 수 있음)
 
-
+<br>
 
 ### if statement
 
@@ -39,18 +38,46 @@
   - 실행할 코드는 **중괄호{}** 안에 작성
   - 블록 스코프 생성
 
+```js
+if (condition) {
+  //code
+} else if (condition) {
+  //code
+} else {
+  //code
+}
+```
 
+<br>
 
 ### switch statement
 
 - switch
   - **표현식(expression)의 결과값**을 이용한 조건문
   - **표현식의 결과값**과 **case문의 오른쪽 값**을 비교
+  - break, default : [선택적]으로 사용 가능
   - break문이 없는 경우 break문을 만나거나 default문을 실행할 때 까지 다음 조건문 실행
+  - 블록 스코프 생성
 
+```js
+switch(expression) {
+    case 'first value': {
+      //code
+      [break]
+    }
+    case 'second value': {
+      //code
+      [break]
+    }
+    [default: {		//모든 경우에 속하지 않는 경우
+      //code
+    }]
+}
+```
 
+<br>
 
-
+<br>
 
 ## 1.2 반복문
 
