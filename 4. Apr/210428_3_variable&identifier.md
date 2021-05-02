@@ -162,20 +162,51 @@ console.log(bar)  // 0
   => Uncaught SyntaxError: Identifier 'number' has already been declared
   ```
 
-- 블록스코프
+- 블록스코프 (block scope)
 
+  - if, for, function 등의 중괄호 내부를 가리킴
+  - 블록 스코프를 가지는 변수는 블록 바깥에서 접근 불가능
 
+  ```js
+  let x = 1
+  
+  if (x === 1) {
+      let x = 2
+      console.log(x)  //2, 블록 내에서만 유효
+  }
+  
+  console.log(x)  	//1
+  ```
 
-
-
-
-
-
+<br>
 
 ### 변수 선언 키워드 - var
 
 - **var**
   - **재선언** 및 **재할당** 모두 **가능**
+
+    ###### 이게 생각보다 좋은게 아닙니다...!
+
   - ES6 이전에 변수 선언시 사용되던 키워드
+
   - **호이스팅 되는 특성**으로 인해 예기치 못한 문제 발생 가능
+
+    :point_right: ES6 이후부터는 var대신 const, let을 사용하는 것을 권장합니다!!
+
   - 함수 스코프
+
+#### 확인
+
+- 재선언 및 재할당 가능
+
+```js
+var number = 10		//선언 및 초기값 할당
+var number = 50		//재선언 및 재할당
+
+console.log(number)  //50
+```
+
+
+
+- 함수 스코프 (function scope)
+- 호이스팅 (hoisting)
