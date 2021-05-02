@@ -99,7 +99,21 @@ window.document.title  //해당 document에서 title을 출력해줌
 
 #### DOM 관련 객체 상속 구조
 
+<img src="210428_1_JavaScript_DOM.assets/image-20210502163022059.png" alt="image-20210502163022059" style="zoom:33%;" />
 
+- EventTarget
+  - Event Listner를 가질 수 있는 객체가 구현하는 DOM 인터페이스
+- Node
+  - 여러 가지 DOm 타입들이 상속하는 인터페이스
+- Element
+  - Document 안의 모든 객체가 상속하는 가장 범용적인 기반 클래스
+  - 부모인 Node와 그 부모인 EventTarget의 속성을 상속
+- Document
+  - 브라우저가 불러온 웹 페이지를 나타냄
+  - DOM 트리의 진입점(entry point) 역할을 수행
+- HTMLElement
+  - 모든 종류의 HTML 요소
+  - 부모인 element의 속성 상속
 
 <br>
 
@@ -340,7 +354,7 @@ const li2 = document.createElement('li')
 const li3 = document.createElement('li')
 ```
 
-
+<br>
 
 #### add
 
@@ -360,7 +374,7 @@ body.appendChild(ul)  //body의 자식으로 ul태크 넣음(하나만 넣는)
 ul.append(li1, li2, li3)  //ul태그 아래에 3개의 li 태그 넣음(여러개 넣는)
 ```
 
-
+<br>
 
 #### delete
 
@@ -379,7 +393,7 @@ ul.removeChild(li1)  //ul의 자식인 li1 태그 삭제
 ul.remove()  //ul 태그 직접 삭제
 ```
 
-
+<br>
 
 #### element create & read
 
@@ -485,8 +499,16 @@ li3.innerText = '<strong>Third<strong>'  // Third, 마크업 반환
 ### Event Handler
 
 - EventTarget.**addEventListener()**
+
 - 지정한 이벤트가 대상에 전달될 때마다 `호출할 함수를 설정` 합니다
+
 - `이벤트를 지원하는 모든 객체`(Element, Document, Window 등)를 대상으로 지정 가능합니다
+
 - target.addEventListener(type, listener[, options])
   - `type` : 반응할 이벤트 유형 (대소문자 구분 문자열)
-  - `listener` : 지정된 타입의 이벤트가 발생 했을 때 알림을 받는 객체
+  - `listener` : 지정된 타입의 이벤트가 발생 했을 때 알림을 받는 객체 (어떤 함수로 동작할 것인지)
+    - targer을 대상으로 지정한 type의 event가 인자로 들어갑니다
+  
+- EventTarget이 DOM 상속 구조 가장 상다넹 위치하기 때문에 **모든 객체를 대상**으로 addEventListener를 작성할 수 있습니다
+
+  <img src="210428_1_JavaScript_DOM.assets/image-20210502164612473.png" alt="image-20210502164612473" style="zoom:33%;" />
