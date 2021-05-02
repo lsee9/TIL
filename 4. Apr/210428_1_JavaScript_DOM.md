@@ -512,3 +512,48 @@ li3.innerText = '<strong>Third<strong>'  // Third, 마크업 반환
 - EventTarget이 DOM 상속 구조 가장 상다넹 위치하기 때문에 **모든 객체를 대상**으로 addEventListener를 작성할 수 있습니다
 
   <img src="210428_1_JavaScript_DOM.assets/image-20210502164612473.png" alt="image-20210502164612473" style="zoom:33%;" />
+
+#### 예시
+
+- 함수를 외부에 지정한 뒤 사용하는 방법
+
+```html
+//button 클릭 시, 클릭했다는 안내 메세지가 화면에 표시됩니다
+<body>
+    <button id="my-button">Click!!</button>
+	<script>
+    	//함수 정의
+        const alertMessage = function () {
+            alert('Click 했다')
+        }
+        //이벤트 정의
+        const myButton = document.querySelector('#my-button')
+        myButton.addEventListener('click', alertMessage)
+    </script>
+</body>
+```
+
+- 내부에 함수를 지정하는 방법
+  - input에 입력해준 데이터는 event의 targrt의 value에 존재합니다
+  - event의 data에도 입력한 값이 있으나, 이는 현재 입력된 값만 보여줄 뿐 누적되지 않습니다
+
+```html
+//글자를 입력할 때마다 실시간으로 입력한 글자가 출력되어 보여집니다
+<body>
+    <p id="my-paragraph"></p>
+    <form>
+        <label for="text-input">내용을 입력해보세요</label>
+        <input id="text-input" type="text">
+    </form>
+	<script>
+       const myTextInput = document.querySelector('#text-input')
+    	//이벤트 정의
+       myTextInput.addEventListener('input', function (event) {
+           //console.log(event)  //글자를 입력할 때마다 이벤트 발생 확인
+           const myPtag = document.querySelector('#my-paragraph')
+           myPtag.innerText = event.target.value
+       })        
+    </script>
+</body>
+```
+
