@@ -557,3 +557,9 @@ li3.innerText = '<strong>Third<strong>'  // Third, 마크업 반환
 </body>
 ```
 
+<br>
+
+<br>
+
+##### :dizzy_face: 일단 꼭 필요한 메서드와 속성들을 알아봤습니다... 연습... 연습이 필요해..!!!
+
