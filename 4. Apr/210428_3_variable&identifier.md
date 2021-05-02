@@ -206,7 +206,35 @@ var number = 50		//재선언 및 재할당
 console.log(number)  //50
 ```
 
-
-
 - 함수 스코프 (function scope)
-- 호이스팅 (hoisting)
+  - 함수의 중괄호 내부를 가리킴
+  - 함수 스코프를 가지는 변수는 함수 바깥에서 접근 불가
+
+```js
+function func() {
+    var x = 5
+    console.log(x)  //5
+}
+console.log(x)
+
+=> Uncaught ReferenceError: x is not defined
+```
+
+- 호이스팅 (hoisting) 
+
+  > (무언가를) 끌어올리다
+
+  - 변수를 선언 이전에 참조할 수 있는 현상
+  - 변수 선언 이전의 위치에서 접근 시 undefined를 반환
+
+```js
+console.log(username) 	//undefined
+var username = 'jieun'
+
+console.log(age)  		//Uncaught ReferenceError
+let age = 28
+
+console.log(phone)		//Uncaught ReferenceError
+const phone = '010-1234-5678'
+```
+
