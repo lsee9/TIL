@@ -36,17 +36,47 @@
 
 ### 작성 스타일
 
-- **카멜 케이스** (camelCase, lower-camel-case)
+- **카멜 케이스** (`camelCase`, lower-camel-case)
   - 변수, 객체, 함수에 사용
-- **파스칼 케이스** (PascalCase, upper-camel-case)
+
+```js
+//변수
+let name
+let variableName
+
+//객체
+const userInfo = { name: 'jieun', age: 28 }
+
+//함수
+function onClick () {}
+```
+
+- **파스칼 케이스** (`PascalCase`, upper-camel-case)
   - 클래스, 생성자에 사용
-- **대문자 스네이크 케이스** (SNAKE_CASE)
+
+```js
+//클래스
+class User {
+    constructor(options) {
+        this.name = options.name
+    }
+}
+
+//생성자
+const good = new User({
+    name: 'leejieun'
+})
+```
+
+- **대문자 스네이크 케이스** (`SNAKE_CASE`)
   - 상수 (constants)에 사용
     - 상수 : 개발자의 의도와 상관없이 **변경될 가능성이 없는 값**
 
-
-
-
+```js
+// 상수
+const PI = Math.PI
+const API_KEY = 'MYKEY'
+```
 
 <br>
 
