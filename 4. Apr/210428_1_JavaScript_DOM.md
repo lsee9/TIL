@@ -246,9 +246,74 @@ window.document.title  //해당 document에서 title을 출력해줌
   - 문서가 바뀔 때 `실시간으로 업데이트`
   - DOM의 변경사항을 실시간으로 collection에 반영
   - 예) HTMLCollection, NodeList
+
+```html
+//글씨를 빨간색으로 바꾸는 'red'라는 class가 style에 지정되어있습니다
+<body>
+    <div>
+        <p class="live">I'm Live</p>
+        <p class="live">I'm Live</p>
+        <p class="live">I'm Live</p>
+    </div>
+    <script>
+		const liveNodes = document.getElementsByClassName('live')
+        
+        for (let i = 0; i < liveNodes.length; i++) {
+            liveNodes[i].className = 'red'
+        }
+	</script>	
+</body>
+
+//결과
+I'm Live (red 적용)
+I'm Live
+I'm Live (red 적용)
+```
+
 - **Static Collection (non-live)**
   - DOM이 변경되어도 `collection 내용에는 영향 X`
   - querySelectorAll()의 반환 NodeList만 static
+
+```html
+//글씨를 파란색으로 바꾸는 'blue'라는 class가 style에 지정되어있습니다
+<body>
+    <div>
+        <p class="non-live">I'm Non-Live</p>
+        <p class="non-live">I'm Non-Live</p>
+        <p class="non-live">I'm Non-Live</p>
+    </div>
+    <script>
+		const noneliveNodes = document.querySelectorAll('.non-live')
+        
+        for (let i = 0; i < nonliveNodes.length; i++) {
+            liveNodes[i].className = 'blue'
+        }
+	</script>	
+</body>
+
+//결과
+I'm Non-Live (blue 적용)
+I'm Non-Live (blue 적용)
+I'm Non-Live (blue 적용)
+```
+
+##### :thinking: 무슨 차이일까..?
+
+- **Live**
+  - for문을 수행하기 전 : liveNodes => class 'live'인 3개의 p태그 존재
+  - for문 `1회` 수행
+    - 첫번째 p태그의 class가 'red'로 변경된다
+    - liveNodes => class 'live'인 2개의 p태그 존재 
+    - `liveNodes.length == 2`로 변화하고,`i는 1`이 된다
+  - 2회 for문의 동작
+    - 2개의 liveNodes중 i=1로 마지막 p태그를 가르킨다
+    - 따라서 `마지막 p 태그`의 class가 `'red'로 변화`한다
+    - i = 2가 되고, liveNodes.length == 1이 되므로 for문이 종료된다
+- **static**
+  - nonliveNodes의 값이 처음 3개로 고정된다
+  - 따라서 class가 변경되어도, nonliveNodes는 변하지 않으므로 모든 p태그의 class를 변경할 수 있다
+
+###### :fire: Live를 쓰면 원하는 대로 동작하지 않을 가능성이 높습니다! static을 사용합시다! :fire:
 
 <br>
 
