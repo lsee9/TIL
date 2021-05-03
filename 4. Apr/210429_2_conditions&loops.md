@@ -110,3 +110,22 @@ while (evenNumber < 6) {
 }
 ```
 
+<br>
+
+### for
+
+- 세미콜론(;)으로 구분되는 세 부분을 구성
+  - `initialization`
+    - 최초 반복문 진입시 1회만 실행되는 부분
+  - `condition`
+    - 매 반복 시행 전 평가되는 부분
+  - `expression`
+    - 매 반복 시행 이후 평가되는 부분
+- 블록 스코프 생성
+
+```js
+for (let oddNum = 1; oddNum < 5; oddNum += 2) {
+    console.log(oddNum)  //1, 3
+}
+```
+
