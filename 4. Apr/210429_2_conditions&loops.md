@@ -96,11 +96,19 @@ switch(expression) {
 
 ### while
 
-- 조건문이 참(true)인 동안 반복 시행
+- 조건문이 **참(true)인 동안 반복** 시행
 
 - 조건(condition)은 소괄호안에 작성
 - 실행할 코드는 중괄호({})안에 작성
 - 블록 스코프 생성
+
+```js
+while (condition) {
+  //code
+}
+```
+
+#### 예시
 
 ```js
 let evenNumber = 0
@@ -123,9 +131,61 @@ while (evenNumber < 6) {
     - 매 반복 시행 이후 평가되는 부분
 - 블록 스코프 생성
 
+```javascript
+for (initialiation; condition; expression) {
+    //code
+}
+```
+
+#### 예시
+
+1. initialization 수행
+
+2. 조건확인
+
+3. 코드 블록 실행 후 expression 수행
+4. 2, 3 반복
+
 ```js
 for (let oddNum = 1; oddNum < 5; oddNum += 2) {
     console.log(oddNum)  //1, 3
 }
+```
+
+<br>
+
+### for... in
+
+- **객체(object)의 속성들을 순회**할 때 사용
+- 배열고 순회 가능하지만 권장하지 않음
+- 실행할 코드는 중괄호 안에 작성
+- 블록 스코프 생성
+
+```javascript
+for (variable in object) {
+    //code
+}
+```
+
+#### 예시
+
+- 객체의 value는 점(.) 또는 대괄호([]) 표기법을 이용하여 key값을 통해 접근 가능!
+  - `obj.key`, `obj[key]`
+
+```javascript
+const personInfo = {
+    name: 'Jieun-Lee',
+    age: 29,
+    phone: '010-1234-5678'
+}
+
+for (let person in personInfo) {
+    console.log(`${person}: ${personInfo[person]}`)
+}
+
+// 출력
+//name: Jieun-Lee
+//age: 29
+//phone: 010-1234-5678
 ```
 
