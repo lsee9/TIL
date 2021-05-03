@@ -94,6 +94,10 @@ console.log(todo)
 
 ### :thinking:왜 비동기(Asynchronous)를 사용할까?
 
+> "human-centered design with UX"
+>
+> "사용자 경험을 갖춘 인간 중심 설계"
+
 - :cherry_blossom:**사용자 경험** :cherry_blossom: 을 증대시키기 위해서!!
   - 예를 들어... 데이터를 구종하고 실행되는 앱에서 데이터가 굉장히 크다고 생각해보자
   - 동기식이라면???
@@ -149,3 +153,40 @@ console.log(todo)
   2. Web API (Browser API)
   3. Task Queue (Event Queue, Message Queue)
   4. Event Loop
+
+<br>
+
+#### Call Stack
+
+> 요청을 처리하는 장소
+
+- 요청이 들어올 때마다 해당 요청을 순차적으로 처리하는 Stack(LIFO) 형태의 자료 구조
+- 바로 처리할 수 없는 것을 다른 곳 (Web API)으로 보냄
+
+#### Web API (Browser API)
+
+> 시간이 필요한 일을 처리하는 장소
+
+- JavaScript 엔진이 아닌 브라우저 영역에서 제공하는 API (브라우저의 힘을 빌려 처리해달라고 함!)
+- (대표적으로) setTimeout(), DOM events, 그리고 AJAX로 데이터를 가져오는 시간이 소요되는 일들을 처리한다
+
+#### Task Queue (Event Queue, Message Queue)
+
+> 일처리가 끝난 뒤, 대기하는 장소
+
+- 콜백 함수가 대기하는 Queue (FIFO) 형태의 자료 구조
+- main thread가 끝난 후 실행되어 후속 JavaScript 코드가 차단되는 것을 방지 
+  - 즉, main thread가 멈추는 것을 방지
+
+#### Event Loop
+
+> 지속적으로 감시하다가, 대기인원을 스택으로 보내는 역할
+
+- Call Stack이 비어있는지 여부를 확인
+- 비어 있는 경우 Task Queue에서 실행 대기중인 콜백이 있는지 확인
+- Task Queue에 대기중인 콜백이 있다면, 가장 앞에 있는 콜백을 Call Stack으로 push
+
+runtime.....그림으로 표현하면 좋긴한데...ㅎㅎㅎ
+
+<br>
+
