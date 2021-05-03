@@ -87,5 +87,26 @@ switch(expression) {
 - for
 - for...in
   - 주로 **객체(object)의 속성들을 순회**할 때 사용
+  - 배열 순회도 가능하나 `인덱스 순으로 순회한다는 보장이 없`으모로 권장하지 않음
 - for...of
   - **반복 가능한(iterable) 객체를 순회**하며 값을 꺼낼 때 사용 (Array, Map, Set, String)
+    - 반복 가능한 객체 종류 : Array, Map, Set, Srting 등
+
+<br>
+
+### while
+
+- 조건문이 참(true)인 동안 반복 시행
+
+- 조건(condition)은 소괄호안에 작성
+- 실행할 코드는 중괄호({})안에 작성
+- 블록 스코프 생성
+
+```js
+let evenNumber = 0
+while (evenNumber < 6) {
+  console.log(evenNumber)  //0, 2, 4
+  evenNumber += 2
+}
+```
+
