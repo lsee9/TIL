@@ -157,7 +157,8 @@ for (let oddNum = 1; oddNum < 5; oddNum += 2) {
 ### for... in
 
 - **객체(object)의 속성들을 순회**할 때 사용
-- 배열고 순회 가능하지만 권장하지 않음
+  - object는 순서가 필요없이 하나하나의 속성을 표현할 때 쓰는 것!
+- 배열도 순회 가능하지만 권장하지 않음
 - 실행할 코드는 중괄호 안에 작성
 - 블록 스코프 생성
 
@@ -171,6 +172,8 @@ for (variable in object) {
 
 - 객체의 value는 점(.) 또는 대괄호([]) 표기법을 이용하여 key값을 통해 접근 가능!
   - `obj.key`, `obj[key]`
+- 변수에 key를 넣어 접근하는 경우!! 대괄호만 사용할 수 있습니다
+  - 점(.)으로 접근하면 변수를 key자체로 인식합니다
 
 ```javascript
 const personInfo = {
@@ -187,5 +190,35 @@ for (let person in personInfo) {
 //name: Jieun-Lee
 //age: 29
 //phone: 010-1234-5678
+```
+
+<br>
+
+### for... of
+
+- **반복 가능한 (iterable) 객체**를 순회하며 값을 꺼낼 때 사용
+  - 보통 배열 순회에 사용!
+  - python의 for과 유사
+- 실행할 코드는 중괄호 안에 작성
+- 블록 스코프 생성
+
+```javascript
+for (vriable of iterables) {
+    //code
+}
+```
+
+#### 예시
+
+```javascript
+const students = [
+  {name: 'jieun'},
+  {name: 'mina'},
+  {name: 'inho'},
+]
+
+for (const student of students) {
+    console.log(`name: ${student.name}`)
+}
 ```
 
