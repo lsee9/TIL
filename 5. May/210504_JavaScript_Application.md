@@ -34,19 +34,7 @@
 
 <br>
 
-# 1. Like :two_hearts:
-
-
-
-
-
-<br>
-
-<br>
-
-# 2. Follow :couple_with_heart:
-
-#### 기본 설정
+#### 프로젝트 기본 설정
 
 - 가상환경
 
@@ -80,6 +68,18 @@ $ python manage.py runserver
 ```
 
 <br>
+
+# 1. Like :two_hearts:
+
+
+
+
+
+<br>
+
+<br>
+
+# 2. Follow :couple_with_heart:
 
 ### :heavy_check_mark: 해야할 것
 
