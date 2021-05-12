@@ -547,5 +547,89 @@ $ npm i axios
   </template>
   ```
 
+<br>
+
+- **VideoListItem**
+
+  - props를 통해 video를 받아옵니다
+  - video 정보를 출력합니다
+    - thumnail : video.snippet.thumbnails.medium.url (height 180, width 320)
+    - title : video.snippet.title
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    props: {
+      video: {
+        type: Object,
+      },
+    },
+  }
+  </script>
+  ```
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li>
+        <img 
+          :src="video.snippet.thumbnails.medium.url" 
+          alt="video-thumnail"
+          width="320"
+          height="180"
+        >
+        <span>{{ video.snippet.title }}</span>
+      </li>
+    </div>
+  </template>
+  ```
+
+  ##### :fire: template가 더 깔끔했으면 좋겠다구여???
+
+  - `computed`
+    - component에 존재하는 모든 값에 대해 무언가 계산된 값을 만들 때 사용 가능!
+    - url과 title을 return해줘서 간단하게 써봅시다
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    ...
+    computed: {
+      thumbnailUrl () {
+        return this.video.snippet.thumbnails.medium.url
+      },
+      title () {
+        return this.video.snippet.title
+      },
+    },
+  }
+  </script>
+  ```
+
   
 
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li>
+        <img 
+          :src="thumbnailUrl" 
+          alt="video-thumnail"
+          width="320"
+          height="180"
+        >
+        <span>{{ title }}</span>
+      </li>
+    </div>
+  </template>
+  ```
+
+  
