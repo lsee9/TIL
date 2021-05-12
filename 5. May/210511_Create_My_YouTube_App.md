@@ -339,6 +339,51 @@ export default {
   ```
 
 - **App.vue**
+  - `input-change` 이벤트를 인지하면, `onInputChange` 메서드를 실행합니다
+  - `onInputChange`
+    - 인자로 event.target.value를 inputValue라는 이름으로 받습니다 (이름은 설정하기 나름! 도중에 바꾸지만 않으면 OK)
+    - searchKeyword에 inputValue 대입
+    - `getVideos()`를 실행합니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div id="app">
+      ...
+      <SearchBar @input-change="onInputChange"/>
+      ...
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  
+  export default {
+    ...
+    methods: {
+      onInputChange (inputValue) {
+        this.searchKeyword = inputValue
+        this.getVideos()
+      },
+    },
+  }
+  </script>
+  ```
+
+<br>
+
+#### YouTube API 데이터 받아오기
+
+> App.vue에서 searchKeyword를 query로 하여 API에 요청을 보내고, 응답으로 영상 데이터를 받아옵니다!
+>
+> 요청과 응답... **axios**가 필요하겠죠???
+
+- **getVideos()**
 
 
 
