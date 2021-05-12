@@ -129,7 +129,7 @@ export default {
 ```vue
 <template>
   <div>
-    <video-list-item />
+    <VideoListItem  />
   </div>
 </template>
 
@@ -196,7 +196,7 @@ export default {
 <template>
   <div>
     <ul>
-      <video-list-item v-for="video in ['v1', 'v2', 'v3']" :key="video"/>
+      <VideoListItem  v-for="video in ['v1', 'v2', 'v3']" :key="video"/>
     </ul>
   </div>
 </template>
@@ -505,7 +505,47 @@ $ npm i axios
   </template>
   ```
 
+<br>
+
+- **VideoList**
+
+  - `props`로 videos를 받아줍니다!
+  - VideoListItem으로 videos 데이터를 하나씩 전달합니다
+    - v-for="video in videos" : v-for을 이용해 video로 하나씩 분리
+    - key : unigue한 값인 video.id.videoId 사용
+    - video 데이터 넘겨주기
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  export default {
+    props: {
+      videos: {
+        tyep: Array,
+      },
+    },
+    ...
+  }
+  </script>
+  ```
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <VideoListItem  
+          v-for="video in videos" 
+          :key="video.id.videoId"
+          :video="video"
+        />
+      </ul>
+    </div>
+  </template>
+  ```
+
   
-
-
 
