@@ -284,7 +284,7 @@ export default {
 
 <br>
 
-### searchKeyword :old_key:
+### 2.2.1. searchKeyword :old_key:
 
 > SearchBar에서 검색어를 입력하면, 이벤트를 통해 이를 App에 전달한 뒤
 >
@@ -343,7 +343,7 @@ export default {
   - `onInputChange`
     - 인자로 event.target.value를 inputValue라는 이름으로 받습니다 (이름은 설정하기 나름! 도중에 바꾸지만 않으면 OK)
     - searchKeyword에 inputValue 대입
-    - `getVideos()`를 실행합니다
+    - `getVideos()`를 실행합니다 (videos)
 
   ###### template
 
@@ -377,13 +377,135 @@ export default {
 
 <br>
 
+### 2.2.2. videos
+
+> API로부터 받은 데이터를 App에서 내려받은 뒤, 이를 하나하나 VideoListItem에 뿌려줍니다!
+>
+> VideoListItem에서 필요한 데이터를 저장해줘야겠죠??
+
+<br>
+
 #### YouTube API 데이터 받아오기
 
 > App.vue에서 searchKeyword를 query로 하여 API에 요청을 보내고, 응답으로 영상 데이터를 받아옵니다!
 >
 > 요청과 응답... **axios**가 필요하겠죠???
 
+- axios 설치
+
+```shell
+$ npm i axios
+```
+
+
+
 - **getVideos()**
+
+  - axios를 사용해 요청을 보내고 응답을 받습니다
+
+    :heavy_check_mark: **YouTube API**에 **search 요청** 보내기
+
+    - API_URL = '~/youtube/v3/`search`' (요청 종류에 따라 변화)
+
+    - parameter
+
+      `key` : 발급받은 API 키
+
+      `part` : 세부 내용 포함을 위한 부분, id와 snippet 중 snippet을 사용해야함
+
+      `type`: 해당 타입의 결과만 가져옵니다! 우리는 video
+
+      `maxResults` : 가져올 영상 개수를 택할 수 있습니다! default는 5개
+
+      `q` : 검색어! searchKeyword가 들어가야할 부분!
+
+  ###### script
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  ...
+  
+  const API_URL = 'https://www.googleapis.com/youtube/v3/search'
+  const API_KEY = '나의 API Key'
+  
+  export default {
+    ...
+    methods: {
+      ...
+      getVideos () {
+        // 필요한 parameter
+        const params = {
+          key: API_KEY,
+          part: 'snippet',
+          type: 'video',
+          maxResults: 10,
+          q: this.searchKeyword,
+        }
+        //axios 요청
+        axios({
+          method: 'GET',
+          url: API_URL,
+          params,
+        })
+          //call back함수는 arrow function으로!!
+          .then((response)=>{
+            console.log(response)
+          })
+          .catch((error)=>{
+            console.log(error)
+          })
+      },
+    },
+  }
+  </script>
+  ```
+
+  
+
+  - 응답을 제대로 받았다!!!
+    - 그러면 videos에 저장하고, 이를 VideoList로 내려줍니다!! (data binding)
+    - 필요한 데이터는 response의 data아래 items에 있습니다
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  
+  export default {
+    ...
+    methods: {
+      ...
+      getVideos () {
+        const params = {
+          ...
+        }
+        axios({
+          ...
+        })
+          .then((response)=>{
+            this.videos = response.data.items
+          })
+          ...
+      },
+    },
+  }
+  </script>
+  ```
+
+  ###### template
+
+  ```vue
+  <template>
+    <div id="app">
+      ...
+      <VideoList :videos="videos"/>
+    </div>
+  </template>
+  ```
+
+  
 
 
 
