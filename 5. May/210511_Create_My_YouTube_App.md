@@ -20,7 +20,6 @@
 <hr>
 
 
-
 <br>
 
 # 1. 구성
@@ -96,9 +95,11 @@ $ code se-youtube
   <div id="app">
     <h1>My YouTube</h1>
     <!-- 3. 사용 -->
+    <!-- <search-bar /> 이런 형태도 잘 된다는 것! -->
     <search-bar />
-    <video-detail />
-    <video-list />
+    <SearchBar />
+    <VideoDetail />
+    <VideoList />
   </div>
 </template>
 
@@ -251,9 +252,93 @@ export default {
   - videos의 일부인 selectedVideo는 `VideoDetail`에 사용된다
   - 여러 component에서 필요한 데이터 이므로, 공통 부모인 **App**에 선언한다
 - **searchKeyword**
-  - SearchBar에서 사용되지만, API로 전달되어 `videos를 변경하는 역할`을 한다
-  - App에 선언된 videos는 App에서만 변경할 수 있으므로, App에서 searchKeyword를 활용해 API에 요청을 보낸다
+  - `SearchBar`에서 사용되지만, API로 전달되어 `videos를 변경하는 역할`을 한다
+  - App에 선언된 videos는 App에서만 변경할 수 있으므로, `App`에서 searchKeyword를 활용해 API에 요청을 보낸다
   - 따라서 **App**에 선언된다
 
 <br>
+
+#### App.vue
+
+- 필요한 data를 선언합니다
+- :star: **함수의 반환값**으로 지정합니다!! (다른 component에서 참조할 수 없도록 하기 위함!)
+
+```vue
+<script>
+...
+
+export default {
+  ...
+  data () {
+    return {
+      searchKeyword: '',
+      videos: [],
+      selectedVideo: null,
+    }
+  },
+}
+</script>
+```
+
+<br>
+
+<br>
+
+### searchKeyword :old_key:
+
+> SearchBar에서 검색어를 입력하면, 이벤트를 통해 이를 App에 전달한 뒤
+>
+> YouTube API로 데이터를 받아와야합니다!
+
+- **SearchBar**
+
+  - 검색어를 입력하면 `change`이벤트가 발생, `onChange`메서드를 수행합니다
+
+    :heavy_check_mark:`change event`
+
+    - input event와 달리 value가 변할 때 항상 발생하지 않습니다
+
+    - element에 따라 동작이 달라집니다
+
+    - `input type="text"` 
+
+      value가 변경된 후 포커스를 잃었지만(커서가 검색창을 벗어나거나 엔터를 치는 등) commit되지 않은 경우~~(저장?전달?)~~에 발생
+
+  - onChange에서는 emit을 통해 부모 컴포넌트로 이벤트의 발생을 알립니다(키워드도 전달)
+
+    :heavy_check_mark: `emit`('부모가 알아들을 이벤트 이름', payload)
+
+    - 이벤트 이름은 kabab-case로 작성!!!
+    - payload : 추가 데이터, 여러개를 보낼 수 있음(받을 때 순서대로만 받아주자)
+  
+  ###### template
+  
+  ```vue
+  <template>
+    <div>
+      <input 
+        type="text" 
+        @change="onChange"
+      >
+    </div>
+  </template>
+  ```
+  
+  ###### script
+  
+  ```vue
+  <script>
+  export default {
+    methods: {
+      onChange (event) {
+        this.$emit('input-change', event.target.value)
+      },
+    },
+  }
+  </script>
+  ```
+
+- **App.vue**
+
+
 
