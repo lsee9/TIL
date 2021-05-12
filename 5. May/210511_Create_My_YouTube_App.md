@@ -237,3 +237,23 @@ export default {
 
 ### 구성
 
+<img src="210511_Create_My_YouTube_App.assets/image-20210512234143648.png" alt="image-20210512234143648" style="zoom:33%;" />
+
+- SearchBar에서 입력된 searchKeyword로 YouTube API에 데이터 요청
+- API로부터 검색 결과로 videos 받음
+- videos를 VideoList에 뿌려줌
+- 이 중 선택된 selectedVideo를 VideoDetail에 뿌려줌
+
+#### 데이터의 선언 위치는??? :thinking:
+
+- **videos** & **selectedVideo**
+  - searchKeyword로부터 생성되어 VideoList에 뿌려진다
+  - videos의 일부인 selectedVideo는 VideoDetail에 사용된다
+  - 여러 component에서 필요한 데이터 이므로, 공통 부모인 **App**에 선언한다
+- **searchKeyword**
+  - SearchBar에서 사용되지만, API로 전달되어 videos를 변경하는 역할을 한다
+  - App에 선언된 videos는 App에서만 변경할 수 있으므로, App에서 searchKeyword를 활용해 API에 요청을 보낸다
+  - 따라서 **App**에 선언된다
+
+<br>
+
