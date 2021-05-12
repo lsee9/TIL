@@ -247,11 +247,11 @@ export default {
 #### 데이터의 선언 위치는??? :thinking:
 
 - **videos** & **selectedVideo**
-  - searchKeyword로부터 생성되어 VideoList에 뿌려진다
-  - videos의 일부인 selectedVideo는 VideoDetail에 사용된다
+  - searchKeyword로부터 생성되어 `VideoList`에 뿌려진다
+  - videos의 일부인 selectedVideo는 `VideoDetail`에 사용된다
   - 여러 component에서 필요한 데이터 이므로, 공통 부모인 **App**에 선언한다
 - **searchKeyword**
-  - SearchBar에서 사용되지만, API로 전달되어 videos를 변경하는 역할을 한다
+  - SearchBar에서 사용되지만, API로 전달되어 `videos를 변경하는 역할`을 한다
   - App에 선언된 videos는 App에서만 변경할 수 있으므로, App에서 searchKeyword를 활용해 API에 요청을 보낸다
   - 따라서 **App**에 선언된다
 
