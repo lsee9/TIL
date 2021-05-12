@@ -591,7 +591,7 @@ $ npm i axios
   ##### :fire: template가 더 깔끔했으면 좋겠다구여???
 
   - `computed`
-    - component에 존재하는 모든 값에 대해 무언가 계산된 값을 만들 때 사용 가능!
+    - component에 존재하는 모든 값에 대해 무언가 계산된 값을 만들 때 사용 가능! (변경이 일어난 경우 발생)
     - url과 title을 return해줘서 간단하게 써봅시다
 
   ###### script
@@ -632,4 +632,86 @@ $ npm i axios
   </template>
   ```
 
+<br>
+
+### 2.2.3. selectedVideo
+
+> VIdeoListItem을 하나 선택하면, 정보가 selectedVideo에 담겨 전달되며 VideoDetail에 영상과 세부정보가 보여집니다
+>
+> selectedVideo는 App에 선언되어있습니다!!!
+>
+> App까지 이벤트 발생을 알리며 데이터를 전달한 뒤, App에서 selectedVideo를 수정하여 VideoDetail에 내려줘야합니다!
+
+- **VideoListItem**
+
+  - video에 `click`이벤트가 발생하면 `onClick`메서드를 수행합니다
+  - `emit`
+    - 이벤트 발생을 VideoList에 알리고, 선택된 video를 전달합니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li @click="onClick">
+        ...
+      </li>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    ...
+    methods: {
+      onClick () {
+        this.$emit('select-video', this.video)
+      },
+    },
+  }
+  </script>
+  ```
+
+- **VideoList**
+  - `select-video`이벤트가 발생하면 `onSelectVideo` 메서드를 수행합니다
+  - `emit`
+    - 이벤트 발생을 App에 알리고, video를 전달합ㄴ디ㅏ
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <VideoListItem 
+          ...
+          @select-video="onSelectVideo"
+        />
+      </ul>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
   
+  export default {
+    ...
+    methods: {
+      onSelectVideo (video) {
+        this.$emit('select-video', video)
+      },
+    },
+  }
+  </script>
+  ```
+
+- **App.vue**
+  - 
+
