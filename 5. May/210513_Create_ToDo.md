@@ -253,5 +253,130 @@ export default {
 
 ### 2.2.1 todos :page_with_curl:
 
+> TodoFrom에서 작성하면, 이를 App에 전달합니다
+>
+> 그 뒤, 이를 VideoList에 뿌려줘야합니다
 
+#### TodoForm
+
+- form에서 `submit`이벤트가 발생하면, `onSubmit`메서드를 수행합니다
+
+  :heavy_check_mark: form의 기존 이벤트 막는 2가지 방법
+
+  ```js
+  //메서드 내부에
+  event.preventDefault()
+  ```
+
+  ```js
+  //template의 이벤트 발생과 함께
+  @submit.prevent
+  ```
+
+- `onSubmit`
+
+  - **emit**을 통해 부모 component에 이벤트의 발생을 알립니다
+  - payload로 **input value를 전달**해야합니다
+
+  :fire: **input value는 어떻게 가져오지??** :fire:
+  > input value에 event를 다는 경우 (ex. keyup.enter)
+  >
+  > => event.target.value로 가져올 수 있음
+  >
+  > **버튼, form을 통해 이벤트 발생**할 경우
+  >
+  > => 내부 input 데이터를 활용하고, component 내의 data에도 작성해야한다
+  >
+  > => 양방향 binding을 위한 :four_leaf_clover: **v-model** 사용
+
+###### template
+
+```vue
+<template>
+  <div>
+    <form @submit.prevent="onSubmit">
+      <input type="text" v-model="todoInput">
+      <button>+</button>
+    </form>
+  </div>
+</template>
+```
+
+###### script
+
+```vue
+<script>
+export default {
+  data () {
+    return {
+      todoInput: '',
+    }
+  },
+  methods: {
+    onSubmit () {
+      this.$emit('new-todo', this.todoInput)
+      //전달한 뒤 초기화
+      this.todoInput = ''
+    },
+  },
+}
+</script>
+```
+
+<br>
+
+#### App.vue
+
+- TodoForm으로부터 `new-todo`이벤트가 발생하면 `onNewTodo`메서드를 수행합니다
+
+  - 새로운 todo를 생성한 뒤, todos에 추가합니다.
+
+  - todoInput이 빈 경우, 별도의 동작없이 return합니다
+
+    (TodoForm에서 :cherries:v-model.trim()도 방법입니다)
+
+- todos를 TodoList로 전달합니다
+
+###### template
+
+```vue
+<template>
+  <div id="app">
+    <h2>My Todo List</h2>
+    <TodoForm @new-todo="onNewTodo"/>
+    <TodoList :todos="todos"/>
+  </div>
+</template>
+```
+
+###### script
+
+```vue
+<script>
+...
+export default {
+  ...
+  methods: {
+    onNewTodo (todoInput) {
+      // 값이 비어있는경우 패스 
+      //(양쪽 공백 제거해도 빈 값인 경우?)
+      if (!todoInput.trim()) {
+        return
+      }
+      const newTodo = {
+        // unique한 값
+        id: Date.now(),  
+        content: todoInput,
+        completed: false,
+      }
+      this.todos.push(newTodo)
+    },
+  },
+}
+</script>
+```
+
+<br>
+
+#### TodoList
 
