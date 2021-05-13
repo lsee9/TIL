@@ -141,6 +141,8 @@ export default {
 
 <br>
 
+##### 우선 vue로 구현해볼까요~ :musical_note:
+
 ## 2.1. Template 구성하기
 
 > 눈에 보이는 부분!! 뭐가 필요한지 파악하고 추가해봅시다
@@ -198,4 +200,58 @@ export default {
   </div>
 </template>
 ```
+
+<br>
+
+<br>
+
+## 2.2. Data 구성하기
+
+> 무슨 데이터가 필요할까요?? 어떤 데이터를 어디에 정의해볼까요??
+
+### 구성
+
+- **todos**
+  - 작성한 todo list에 해당하는 배열!!
+  - `TodoForm`에서 작성한 뒤, `TodoList`에 뿌려줘야한다!
+  - 따라서 **App**에 선언하자
+
+<br>
+
+#### App.vue
+
+- todos 선언!
+- 함수의 반환값으로 지정하자!!
+- 초기값도 넣어주자
+
+```vue
+<script>
+...
+export default {
+  ...
+  data () {
+    return {
+      todos: [
+        {
+          id: 1,
+          content: '필기하기',
+          completed: false,
+        },
+        {
+          id: 2,
+          content: '정리하기',
+          completed: false,
+        },
+      ],
+    }
+  },
+}
+</script>
+```
+
+<br>
+
+### 2.2.1 todos :page_with_curl:
+
+
 
