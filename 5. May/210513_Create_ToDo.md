@@ -470,7 +470,171 @@ export default {
 >
 > TodoList를 체크해서 완료표시하는 기능!!!
 
-### 완료표시하자
+### 2.3.1. 완료표시하자
 
-- `complated`
+#### TodoListItem
+
+- **class `completed`**
+
   - true인 경우 완료표시를 해야합니다!!
+
+  - `text-decoration: line-through`를 사용합시다
+
+    ##### :thinking: 조건에 따라 class를 빼고 넣는 방법??
+
+    - object형태로 사용하면 value가 **true인 key**가 **class binding값으로 할당**
+
+  ###### style
+
+  ```vue
+  <style>
+   .completed {
+     text-decoration: line-through;
+   }
+  </style>
+  ```
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li>
+        <span
+          :class="{ completed: todo.completed }"
+        >
+          {{ todo.content }}
+        </span>
+        <button>-</button>
+      </li>
+    </div>
+  </template>
+  ```
+
+- **`toggleCompleted`**
+
+  - span 태그 click 하면 toggleCompleted메서드를 수행합니다
+    - completed가 토글되어 취소선이 나타났다 안나타났다 하도록 합니다
+  - App에 데이터가 선언되어있으므로, 값을 변경하기 위해서는 부모 컴포넌트로 전달해야합니다!!!
+    - todo를 식별할 수 있도록 emit을 사용해 event와 todo.id를 전달합니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li>
+        <span
+          :class="{ completed: todo.completed }"
+          @click="toggleCompleted"
+        >
+          {{ todo.content }}
+        </span>
+        <button>-</button>
+      </li>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    ...
+    methods: {
+      toggleCompleted () {
+        this.$emit('toggle-completed', this.todo.id )
+      },
+    },
+  }
+  </script>
+  ```
+
+  
+
+#### TodoList
+
+- **`toggleCompleted`**
+
+  - App으로 이벤트의 발생을 다시 전달합니다!!
+  - toggle-completed가 발생하면, onToggleCompleted메서드를 수행합니다
+    - emit으로 이벤트와 id를 전달합니다!
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <TodoListItem 
+          ...
+          @toggle-completed="onToggleCompleted"
+        />
+      </ul>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    methods: {
+      onToggleCompleted (todoId) {
+        this.$emit('toggle-completed', todoId)
+      },
+    },
+  }
+  </script>
+  ```
+
+
+
+#### App.vue
+
+- **`toggleCompleted`**
+
+  - toggle-completed가 발생하면, onToggleCompleted메서드를 수행합니다
+  - `find`
+    - todos의 todo를 하나씩 확인하여 todo.id가 전달된 todoId와 동일한 경우를 찾아 반환합니다 (조건 만족하는 첫번째 값)
+    - 찾아낸 todo의 completed를 반대로 바꿔줍니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div id="app">
+      ...
+      <TodoList 
+        :todos="todos"
+        @toggle-completed="onToggleCompleted"
+      />
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ,,,
+    methods: {
+      ,,,
+      onToggleCompleted (todoId) {
+        const todo = this.todos.find((todo)=>{
+          return todo.id === todoId
+        })
+        todo.completed = !todo.completed
+      },
+    },
+  }
+  </script>
+  ```
+
+  
