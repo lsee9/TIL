@@ -279,11 +279,11 @@ export default {
   - payload로 **input value를 전달**해야합니다
 
   :fire: **input value는 어떻게 가져오지??** :fire:
-  > input value에 event를 다는 경우 (ex. keyup.enter)
+  > :point_up: ​ input value에 event를 다는 경우 (ex. keyup.enter)
   >
   > => event.target.value로 가져올 수 있음
   >
-  > **버튼, form을 통해 이벤트 발생**할 경우
+  > :v: **버튼, form을 통해 이벤트 발생**할 경우
   >
   > => 내부 input 데이터를 활용하고, component 내의 data에도 작성해야한다
   >
@@ -380,3 +380,5 @@ export default {
 
 #### TodoList
 
+- `props`로 데이터를 받아옵니다!
+- TodoListItem에 하나씩 뿌려줍시다!!
