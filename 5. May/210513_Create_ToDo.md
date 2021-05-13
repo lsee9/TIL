@@ -380,5 +380,97 @@ export default {
 
 #### TodoList
 
-- `props`로 데이터를 받아옵니다!
+- `props`로 `todos`데이터를 받아옵니다!
 - TodoListItem에 하나씩 뿌려줍시다!!
+  - v-for을 사용해서 todo를 하나씩 전달
+  - 각 요소를 구분할 수 있도록 하는 **key**값필수!!! unique한 값인 **todo.id**를 사용합니다
+  - binding으로 todo를 넘겨줍니다
+
+###### script
+
+```vue
+<script>
+...
+export default {
+  ...
+  props: {
+    todos: {
+      type: Array,
+    },
+  },
+}
+</script>
+```
+
+###### template
+
+```vue
+<template>
+  <div>
+    <ul>
+      <TodoListItem 
+        v-for="todo in todos" 
+        :key="todo.id"
+        :todo="todo"
+      />
+    </ul>
+  </div>
+</template>
+```
+
+<br>
+
+#### TodoListItem
+
+- `props`를 이용해 `todo`  를 받아옵니다
+- todo.content를 출력해줍니다
+
+###### script
+
+```vue
+<script>
+export default {
+  props: {
+    todo: {
+      type: Object,
+    },
+  },
+}
+</script>
+```
+
+###### template
+
+```vue
+<template>
+  <div>
+    <li>
+      <span>{{ todo.content }}</span>
+      <button>-</button>
+    </li>
+  </div>
+</template>
+```
+
+<br>
+
+#### 여기까지의 화면!!!
+
+- 데이터 추가까지! 확인했습니다
+
+<img src="210513_Create_ToDo.assets/image-20210514010123607.png" alt="image-20210514010123607" style="zoom:33%;" />
+
+<br>
+
+<br>
+
+## 2.3. 추가기능! :popcorn:
+
+> TodoList를 삭제하는 기능!
+>
+> TodoList를 체크해서 완료표시하는 기능!!!
+
+### 완료표시하자
+
+- `complated`
+  - true인 경우 완료표시를 해야합니다!!
