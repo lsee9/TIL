@@ -637,4 +637,147 @@ export default {
   </script>
   ```
 
+<br>
+
+<br>
+
+### 2.3.2. 삭제하자
+
+#### TodoListItem
+
+- **`removeTodo`**
+
+  - button을 **click**하면 **removeTodo**메서드를 수행합니다
+  - 데이터는 App에 선언되어있으므로, 변경은 App에서만 가능합니다
+  - **emit**을 통해 remove-todo 이벤트를 알리고, todoId를 전달합시다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <li>
+        ...
+        <button @click="removeTodo">-</button>
+      </li>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    ...
+    methods: {
+      ...
+      removeTodo () {
+        this.$emit('remove-todo', this.todo.id)
+      },
+    },
+  }
+  </script>
   
+  ```
+
+<br>
+
+#### TodoList
+
+- **`onRemoveTodo`**
+
+  - remove-todo를 감지하면 onRemoveTodo 메서드를 실행합니다
+  - App으로 이벤트의 발생을 알리고 todoId를 전달합니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <TodoListItem 
+          ...
+          @remove-todo="onRemoveTodo"
+        />
+      </ul>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    methods: {
+      ...
+      onRemoveTodo (todoId) {
+        this.$emit('remove-todo', todoId)
+      },
+    },
+  }
+  </script>
+  ```
+
+<br>
+
+#### App.vue
+
+- **`onRemoveTodo`**
+
+  - remove-todo를 감지하면 onRemoveTodo를 수행합니다
+  - `filter`
+    - todos에 대해, todo.id !== todoId인 경우만 반환하여 todos를 새로 작성합니다!
+
+  ###### template
+
+  ```vue
+  <template>
+    <div id="app">
+      ...
+      <TodoList 
+        ...
+        @remove-todo="onRemoveTodo"
+      />
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    methods: {
+      ...
+      onRemoveTodo (todoId) {
+        this.todos = this.todos.filter((todo)=>{
+          return todo.id !== todoId
+        })
+      },
+    },
+  }
+  </script>
+  ```
+
+<br>
+
+#### 결과화면
+
+<img src="210513_Create_ToDo.assets/image-20210514025921315.png" alt="image-20210514025921315" style="zoom:33%;" />
+
+<br>
+
+<br>
+
+##### 여기까지...vue cli만 사용한 todo...!!!
+
+<br>
+
+##### vuex를 활용해볼까...?
+
