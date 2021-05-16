@@ -888,3 +888,69 @@ $ npm i axios
   ```
 
   
+
+### 2.2.4 video삽입하기
+
+> 비디오를 선택했을 때, 해당 영상을 재생시킬 수 있도록 보여주고 싶다!!!!
+>
+> 아주아주 쉽게 할 수 있습니다!!!
+
+##### VideoDetail
+
+- `iframe`
+  - YouTube 접속 - 아무 영상이나 클릭
+  - [공유] - [퍼가기]
+  - iframe 복사, 원하는 위치에 붙여넣기
+  - **src부분**만 모든 영상이 가능하도록 수정하면 됩니다
+    - 구조 : `https://www.youtube.com/embed/` + `video.id`
+
+- `videoUrl`
+  - 가져온 영상의 src 구조
+  - **computed**를 사용합니다
+  - BaseUrl을 두고, 여기에 video.id를 붙여서 반환합니다
+
+###### script
+
+```vue
+<script>
+export default {
+  props: {
+    video: {
+      type: Object,
+    },
+  },
+  computed: {
+    videoUrl () {
+      const baseUrl = "https://www.youtube.com/embed/"
+      return baseUrl + this.video.id.videoId
+    },
+  },
+}
+</script>
+```
+
+###### template
+
+```vue
+<template>
+  <div v-if="video">
+    <iframe 
+      width="560" 
+      height="315" 
+      :src="videoUrl"
+      title="YouTube video player" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      allowfullscreen
+    ></iframe>
+    ...
+  </div>
+</template>
+```
+
+<br>
+
+<br>
+
+# 3. 추가사항
+
