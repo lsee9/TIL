@@ -339,14 +339,15 @@ export default {
   ```
 
 - **App.vue**
+  
   - `input-change` 이벤트를 인지하면, `onInputChange` 메서드를 실행합니다
   - `onInputChange`
     - 인자로 event.target.value를 inputValue라는 이름으로 받습니다 (이름은 설정하기 나름! 도중에 바꾸지만 않으면 OK)
     - searchKeyword에 inputValue 대입
     - `getVideos()`를 실행합니다 (videos)
-
+  
   ###### template
-
+  
   ```vue
   <template>
     <div id="app">
@@ -356,9 +357,9 @@ export default {
     </div>
   </template>
   ```
-
+  
   ###### script
-
+  
   ```vue
   <script>
   ...
@@ -399,7 +400,7 @@ $ npm i axios
 
 
 
-- **getVideos()**
+- App.vue - **getVideos()**
 
   - axios를 사용해 요청을 보내고 응답을 받습니다
 
@@ -678,7 +679,7 @@ $ npm i axios
 - **VideoList**
   - `select-video`이벤트가 발생하면 `onSelectVideo` 메서드를 수행합니다
   - `emit`
-    - 이벤트 발생을 App에 알리고, video를 전달합ㄴ디ㅏ
+    - 이벤트 발생을 App에 알리고, video를 전달합니다
 
   ###### template
 
@@ -713,5 +714,177 @@ $ npm i axios
   ```
 
 - **App.vue**
-  - 
+  
+  - VideoList에서 `select-video`를 감지하면 `onSelectVideo`메서드를 수행합니다
+  - `onSelectVideo`
+    - 선택된 비디오 정보를 VIdeoDetail로 전달해줘야한다!!!
+  
+    - **selectedVideo**에 담아 전달합니다
+  
+  ###### template
+  
+  ```vue
+  <template>
+    <div id="app">
+      ...
+      <VideoDetail :video="selectedVideo"/>
+      <VideoList 
+      :videos="videos"
+      @select-video="onSelectVideo"
+      />
+    </div>
+  </template>
+  ```
+  
+  
+  
+  ###### script
+  
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    data () {
+      return {
+        ...
+        selectedVideo: null,
+      }
+    },
+    methods: {
+      ...
+      onSelectVideo (video) {
+        this.selectedVideo = video
+      },
+    },
+  }
+  </script>
+  ```
+  
+  
 
+- **VideoDetail**
+
+  - `props`
+    - App.vue로부터 video 데이터를 받아옵니다!
+    - title, description을 출력합니다
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    props: {
+      video: {
+        type: Object,
+      },
+    },
+  }
+  </script>
+  ```
+
+  
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <h2>영상 자리</h2>
+      <div>
+        <h3>{{ video.snippet.title }}</h3>
+        <p>{{ video.snippet.description }}</p>
+      </div>
+    </div>
+  </template>
+  ```
+
+  ##### :fire: 만약 선택된 비디오가 없다면...????
+
+  - console을 확인하면, 처음에는 비디오를 선택하지 않아 데이터가 없기 때문에
+  - 제목과 설명을 띄우는데, 에러가 발생합니다!!!
+
+  ##### :four_leaf_clover: 해결법 2가지
+
+  1. `computed`사용
+     - title, description을 만듭니다
+     - video데이터가 없으면 비디오를 선택해달라는 메세지를 출력합니다
+     - video 데이터가 있다면, title과 description을 출력합니다
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    ...
+    computed: {
+      title () {
+        if (this.video == null) {
+          return '어떤 비디오가 좋은가요?'
+        }else {
+          return this.video.snippet.title
+        }
+      },
+      description () {
+        if (this.video == null) {
+          return '보고싶은 비디오를 선택해주세요:D'
+        }else {
+          return this.video.snippet.description
+        }
+      },
+    },
+  }
+  </script>
+  ```
+
+  
+
+  ###### template
+
+  ```vue
+  <template>
+    <div>
+      <h2>영상 자리</h2>
+      <div>
+        <h3>{{ title }}</h3>
+        <p>{{ description }}</p>
+      </div>
+    </div>
+  </template>
+  ```
+
+  
+
+  2. `v-if`사용 :heavy_check_mark: 택
+     - title과 description을 감싸는 div 태그에 v-if를 추가합니다
+     - 데이터가 있어 true가 되는 경우에만 데이터를 출력합니다
+
+  ###### template
+
+  ```vue
+  <template>
+    <div v-if="video">
+      <h2>영상 자리</h2>
+      <div>
+        <h3>{{ video.snippet.title }}</h3>
+        <p>{{ video.snippet.description }}</p>
+      </div>
+    </div>
+  </template>
+  ```
+
+  ###### script
+
+  ```vue
+  <script>
+  export default {
+    props: {
+      video: {
+        type: Object,
+      },
+    },
+  }
+  </script>
+  ```
+
+  
