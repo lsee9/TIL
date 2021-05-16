@@ -855,7 +855,7 @@ $ npm i axios
 
   
 
-  2. `v-if`사용 :heavy_check_mark: 택
+  2. `v-if`사용
      - title과 description을 감싸는 div 태그에 v-if를 추가합니다
      - 데이터가 있어 true가 되는 경우에만 데이터를 출력합니다
 
@@ -887,7 +887,9 @@ $ npm i axios
   </script>
   ```
 
-  
+##### 여기서는 둘 다 사용하겠습니다!! :wink:
+
+<br>
 
 ### 2.2.4 video삽입하기
 
@@ -953,4 +955,191 @@ export default {
 <br>
 
 # 3. 추가사항
+
+> 이제 화면을 구성하고, 추가적으로 필요한 기능을 넣어봅시다!!
+>
+> UX를 고려해 예쁘고 편하게 구현하는 것 또한 중요한 부분입니다!
+
+## 3.1. 특수문자 처리하기
+
+> Youtube 제목이나 설명에서는 단순한 글자가 아닌 특수문자를 볼 수 있는데요...
+>
+> 현재는 이런 것들이 #39; 이런식으로 알 수 없는 문자로 표현됩니다!!!
+>
+> 이를 해결하기 위한 2가지 방법을 알아봅시다
+
+#### 1. v-html 활용
+
+- v-html을 활용하여 특수문자를 처리할 수 있습니다
+- 그러나... 추천하는 방법은 아닙니다
+  - html은 공격에 취약할 수 있기때문에 사용하지 않는걸 권장합니다!
+
+##### VideoListItem
+
+###### template
+
+```vue
+<template>
+  <div>
+    <li @click="onClick">
+      ...
+      <span v-html="title"></span>
+    </li>
+  </div>
+</template>
+```
+
+
+
+#### 2. `_.unescape` 활용
+
+- lodash의 `_.unescape`를 적용하면 특수문자를 올바르게 처리할 수 있습니다
+  - `&`(\&amp;), `<`(\&lt;), `>`(\&gt;), `"`(\&quot;), `'`(\&#39;)를 처리할 수 있습니다
+  - 추가적인 처리가 필요하다면 외부 라이브러리를 설치해주세요! ([he](https://github.com/mathiasbynens/he) 같은)
+
+##### 설치
+
+```shell
+$ npm i lodash
+```
+
+##### VideoListItem
+
+###### script
+
+```vue
+<script>
+import _ from 'lodash'
+
+export default {
+  ...
+  computed: {
+    ...
+    title () {
+      return _.unescape(this.video.snippet.title)
+    },
+  },
+  ...
+}
+</script>
+```
+
+
+
+###### template
+
+```vue
+<template>
+  <div>
+    ...
+      <span>{{ title }}</span>
+    </li>
+  </div>
+</template>
+```
+
+
+
+##### VideoDetail
+
+###### script
+
+```vue
+<script>
+import _ from 'lodash'
+
+export default {
+  ...
+  computed: {
+    title () {
+      if (this.video == null) {
+        return '어떤 비디오가 좋은가요?'
+      }else {
+        return _.unescape(this.video.snippet.title)
+      }
+    },
+    description () {
+      if (this.video == null) {
+        return '보고싶은 비디오를 선택해주세요:D'
+      }else {
+        return _.unescape(this.video.snippet.description)
+      }
+    },
+    ...
+  },
+}
+</script>
+```
+
+
+
+###### template
+
+```vue
+<template>
+  <div v-if="video">
+    ...
+    <div>
+      <h3>{{ title }}</h3>
+      <p>{{ description }}</p>
+    </div>
+  </div>
+</template>
+```
+
+<br>
+
+## 3.2. 화면 구조 잡기
+
+> 처음에 계획한 것에 기반으로, 영상 리스트 옆에 선택항 영상 비디오가 보이도록 만들어봅시다!!!
+>
+> 우선은... 웹페이지 크기만 고려했습니다!!!
+
+#### Bootstrap의 Grid system활용
+
+> Grid 시스템을 이용해서 두개의 col을 나눠주겠습니다!!!
+>
+> VideoDetail부분은 video를 선택한 정보가 있는 경우에 나타나므로, Grid system이 적합하다고 판단했습니다 (없으면 리스트가 전체를 차지하도록!!!)
+
+##### CDN 가져오기
+
+- public/index.html
+  - CSS, JS CDN을 각각 head와 body에 작성합니다
+
+```html
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    ...
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    ...
+  </head>
+  <body>
+    ...
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
+</html>
+```
+
+
+
+
+
+<br>
+
+## 3.3. UX개선하기
+
+### 3.3.1. 영상 선택 표시하기
+
+
+
+
+
+### 3.3.2. 선택한 영상과 영상 리스트 영역 분리
+
+
+
+
+
+### 3.3.3. 선택한 영상이 스크롤과 함께 내려가도록!
 
