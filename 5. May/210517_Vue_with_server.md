@@ -108,6 +108,8 @@
 ## 2.2. Cross-Origin Resource Sharing (CORS)
 
 > 교차 출처 리소스(자원) 공유
+>
+>  [CORD MDN](https://developer.mozilla.org/ko/docs/Web/HTTP/CORS) :point_left:한번쯤은 읽기 
 
 - **`추가 Http header를 사용`**하여, 특정 출처에서 실행중인 웹 애플리케이션이 **다른 출처의 자원에 접근 할 수 있는 권한을 부여하도록 `브라우저에 알려주는 체제`**
 
@@ -125,3 +127,64 @@
 - 다른 출처의 리소스를 불러오려면 그 출처에서 `올바른 CORS header를 포함한 응답을 반환` 해야한다
   - 응답 + header
   - **브라우저**가 이를 확인하고 **승인**하는 형태
+
+<br>
+
+#### Cross-Origin Resource Sharing Policy (CORS Policy)
+
+###### <=> SOP
+
+- 교차 출처 리소스 (자원) **공유 정책**
+- 다른 출처(origin)에서 온 리소스를 공유하는 것에 대한 정책
+
+<br>
+
+#### 교차 출처 접근 허용하기
+
+- CORS 사용해 교차 출처 접근 허용
+- CORS는 HTTP의 일부로, **어떤 호스트**에서 자신의 컨텐츠를 불러갈 수 있는지 **`서버에 지정`**할 수 있는 방법
+- 응답 + CORS header => 브라우저(클라이언트) 에게 보냄
+
+<br>
+
+### 2.2.1. Why CORS?
+
+> 왜 써야만 할까??/
+
+1. 브라우저 & 웹 애플리케이션 보호
+
+   - 악의적인 사이트(=같은 출처 아닌) 에서 데이터를 가져오지 않도록 사전 차단
+   - 응답으로 받은 자원에 대한 **최소한의 검증**
+   - 서버는 정상적으로 응답하지만 **브라우저에서 차단**
+
+2. Server의 자원 관리
+
+   - 누가 해당 리소스에 접근 할 수 있는지 관리 가능 
+
+     (서버가 header를 붙이므로, 이를 파악하고 관리할 수 있다)
+
+<br>
+
+### 2.2.2. How CORS?
+
+- CORS 표준에 의해 추가된 **HTTP Header**를 통해 이를 통제
+
+- CORS HTTP 응답 헤더 예시 
+
+  ###### 목적과 상황에 따라 다양! 대표적인 4가지를 보자
+
+  - Access-Control-Allow-Origin ​ ​ ​ ​ ​ ​ ​ :heavy_check_mark: 출처에 대한 것 사용해보자
+  - Access-Control-Allow-Credentials
+  - Access-Control-Allow-Headers
+  - Access-Control-Allow-Methods
+
+<br>
+
+#### Access-Control-Allow-Origin 응답 헤더
+
+- 이 **응답이 주어진 출처**(origin)으로 부터 **요청 코드와 공유될 수 있는 지**를 나태낸다
+
+- 예
+  - `Access-Control-Allow-Origin: *`
+  - 브라우저 리소스에 접근하는 임의의 origin으로부터 **요청을 허용한다고 알리는 응답에 포함**
+
