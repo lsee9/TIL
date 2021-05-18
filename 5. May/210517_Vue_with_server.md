@@ -167,6 +167,8 @@
 
 ### 2.2.2. How CORS?
 
+> 어떻게 써야하는거니...
+
 - CORS 표준에 의해 추가된 **HTTP Header**를 통해 이를 통제
 
 - CORS HTTP 응답 헤더 예시 
@@ -187,4 +189,30 @@
 - 예
   - `Access-Control-Allow-Origin: *`
   - 브라우저 리소스에 접근하는 임의의 origin으로부터 **요청을 허용한다고 알리는 응답에 포함**
+  - `*` : 모든 도메인에서 접근할 수 있음을 의미
+  - 특정 origin 하나를 명시 할 수 있다@@
+
+<br>
+
+### 2.2.3. CORS 시나리오 예시
+
+> 우리의 시나리오!
+>
+> 이러이러한 흐름에 따라 CORS를 사용해봅시다
+
+1. Vue.js에서 A 서버로 요청
+2. A 서버는 Access-Control-Allow-Origin에 **특정한 origin을 포함시켜 응답**
+   - 서버는 CORS Policy와 직접적인 연관이 없다!! 그저 요청에 응답할 뿐
+3. **브라우저**는 응답에 Access-Control-Allow-Origin을 확인 후 **허용 여부**를 결정한다!
+4. 프레워크 별로 이를 지원하는 라이브러리가 존재
+   - django는 **`django-cors-headers`** 라이브러리를 통해 응답 헤더 및 추가 설정 가능!
+
+#### 왜 CORS 처리 해야하나??
+
+- Vue.js에서 요청을 하게되는데, django과 서로 출처가 다르다!
+  - Vue.js : port 8080
+  - django : port 8000
+- 서로 다른 출처로, SOP에 의해 차단된다
+- 이를 해결하기위해서 django에서 `응답 + CORS Header 형태`로 보내야 한다
+- 그러면 브라우저에서 이를 검토한 뒤, 응답을 전달한다
 
