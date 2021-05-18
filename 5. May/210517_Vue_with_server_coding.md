@@ -299,7 +299,7 @@ $ npm run serve
 
   
 
-#### todos
+##### todos
 
 - **models.py**
 
@@ -360,4 +360,24 @@ $ npm run serve
           ...
   ```
 
+  ##### :fire: 다른 형태로 데이터를 전달할 순 없을까?
+
+  - dict 형태로 묶어버리면, 나중에 todoCount같은 추가 정보도 붙이기 쉬워집니다
+  - 따라서 필요하다면 다음처럼 형태를 바꿀 수 있습니다
   
+  ```python
+  @api_view(['GET', 'POST'])
+  def todo_list_create(request):
+      if request.method == 'GET':
+          todos = Todo.objects.all()
+          serializer = TodoSerializer(todos, many=True)
+          context = {
+              todos: serializer.data,
+          }
+          return Response(context)
+  ```
+  
+  
+
+### Client
+
