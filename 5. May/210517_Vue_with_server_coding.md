@@ -245,10 +245,8 @@ $ npm run serve
 
    - 처음 `페이지에 들어왔을 때`, 전체 `todo list를 가져와야`한다
      - 버튼을 눌러서도 가져올 수 있다
-   - 
-
    - todo의 title을 클릭하면 completed 값을 바꿀 수 있고, 이에따라 class가 토글됩니다
-   - delete 버튼을 누르면 삭제된다
+- delete 버튼을 누르면 삭제된다
 
 <br>
 
@@ -381,3 +379,84 @@ $ npm run serve
 
 ### Client
 
+##### TodoList.vue
+
+###### script
+
+- `getTodos()`
+
+  - 요청 양식에 맞게 axios 요청을 보내고 응답을 받습니다
+    - method : 'GET'
+    - url : `'http://127.0.0.1:8000/todos/'`
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    name: 'TodoList',
+    data: function () {
+      return {
+        todos: [],
+      }
+    },
+    methods: {
+      getTodos: function () {
+        axios({
+          method: 'get',
+          url: 'http://127.0.0.1:8000/todos/'
+        })
+          .then((res) => {
+            console.log(res)
+            this.todos = res.data
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      },
+      ...
+  }
+  </script>
+  ```
+
+  
+
+- `created`
+
+  - TodoList에 들어오면 모든 list를 자동으로 불러옵니다
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    created: function () {
+      this.getTodos()
+    }
+  }
+  </script>
+  ```
+
+###### template
+
+- `v-for`
+
+  - todos의 todo를 하나씩 보여줍니다
+
+- button을 click해도 getTodos가 실행됩니다
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <li v-for="todo in todos" :key="todo.id">
+          <span>{{ todo.title }}</span>
+          <button class="todo-btn">X</button>
+        </li>
+      </ul>
+      <button @click="getTodos">Get Todos</button>
+    </div>
+  </template>
+  ```
+
+  
