@@ -616,7 +616,147 @@ $ npm run serve
 
 > 필요없는 todo를 삭제합시다
 
+### Client
+
+##### TodoList.vue
+
+###### template
+
+- li태그로 표현되는 todo에 붙은 X button을 `click`하면, `deleteTodo`가 실행됩니다
+
+- 이때 삭제되는 todo가 뭔지 알 수 있도록 함수의 인자로 전달합니다
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <li v-for="todo in todos" :key="todo.id">
+          <span>{{ todo.title }}</span>
+          <!-- 삭제 버튼!! -->
+          <button @click="deleteTodo(todo)" class="todo-btn">X</button>
+        </li>
+      </ul>
+      <button @click="getTodos">Get Todos</button>
+    </div>
+  </template>
+  ```
+
+  
+
+###### script 
+
+- `deleteTodo`
+
+  - axios 요청을 보내 DB에서 해당 todo를 삭제합니다 (전달받은 todo를 통해 url에 접근)
+    - method : delete
+    - url : `http://127.0.0.1:8000/todos/${todo.id}/`
+
+  ##### :heavy_check_mark: todo가 삭제되면, 기존 TodoList에서도 없어져야하지 않을까??
+
+  - `this.getTodos()`를 실행하여, 저장되어있는 전체 todo list를 받아옵니다!
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    ...
+    methods: {
+      ...
+      deleteTodo: function (todo) {
+        axios({
+          method: 'delete',
+          url: `http://127.0.0.1:8000/todos/${todo.id}/`
+        })
+          .then((res) => {
+            console.log(res)
+            this.getTodos()
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      },
+    },
+    ...
+    }
+  }
+  </script>
+  ```
+
+  
+
 ### Server
 
-- **models.py**
+- **urls.py**
+
+  - todo_pk를 url에 받아주어 구분합니다
+
+  ```python
+  from django.urls import path
+  from . import views
+  
+  urlpatterns = [
+      ...
+      path('<int:todo_pk>/', views.todo_update_delete),
+  ]
+  ```
+
+
+
+- views.py - **todo_update_delete**
+  - DELETE로 요청이 들어온 경우, DB에서 삭제한 뒤 삭제된 id를 응답합니다
+
+  ```python
+  from django.shortcuts import get_object_or_404
+  from rest_framework import status
+  from rest_framework.response import Response
+  from rest_framework.decorators import api_view
+  
+  @api_view(['PUT', 'DELETE'])
+  def todo_update_delete(request, todo_pk):
+      todo = get_object_or_404(Todo, pk=todo_pk)
+      if request.method == 'PUT':
+          #...
+      elif request.method == 'DELETE':
+          todo.delete()
+          return Response({ 'id': todo_pk })
+  ```
+
+  
+
+<br>
+
+### 1.1.4. Todo Update
+
+> todo를 완료하면 취소선을 그어봅시다!!
+
+### Client
+
+##### TodoList.vue
+
+###### template
+
+- class `.completed`
+
+  - text-decoration으로 취소선이 그어지도록 하는 클래스!
+  - `todo.completed`에 따라 class 적용 여부를 결정합니다(true인 경우 취소선)
+
+- todo를 `click`하면 `updateTodoStatus`를 실행하여 기존의 completed를 변경합니다
+
+  ```vue
+  <template>
+    <div>
+      <ul>
+        <li v-for="todo in todos" :key="todo.id">
+            <!-- 업데이트 부분 -->
+          <span @click="updateTodoStatus(todo)" :class="{ completed: todo.completed }">{{ todo.title }}</span>
+          <button @click="deleteTodo(todo)" class="todo-btn">X</button>
+        </li>
+      </ul>
+      <button @click="getTodos">Get Todos</button>
+    </div>
+  </template>
+  ```
+
+  
 
