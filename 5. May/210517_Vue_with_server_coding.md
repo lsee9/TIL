@@ -254,7 +254,9 @@ $ npm run serve
 
 ### Server
 
-##### CORS를 위한 설정
+##### CORS를 위한 설정 :cherries:
+
+###### vue와 django가 데이터를 주고받기 위해서는 필수!!!
 
 - mypjt/**settings.py**
 
@@ -459,4 +461,162 @@ $ npm run serve
   </template>
   ```
 
+<br><br>
+
+### 1.1.2. Todo Create
+
+> todo를 작성하자!!
+>
+> TodoList에서 만들어줄 수도 있지만, router를 사용하기위해 나눠주었습니다!
+
+### Server
+
+- **models.py**
+
+  - completed값이 `default false`로 정해져 있기때문에 새로운 값을 작성할 때, 전달할 필요가 없습니다
+
+  ```python
+  from django.db import models
   
+  class Todo(models.Model):
+      title = models.CharField(max_length=50)
+      completed = models.BooleanField(default=False)
+  
+      def __str__(self):
+          return self.title
+  ```
+
+- **serializers.py**
+
+  - 모든 값이 필드로 지정되어있으므로, `is_valid`에서 모든 값이 존재해야 통과합니다
+  - 검증에 사용하지 않고 사용하기만 하려면 `read_only_fields = ('completed', )` 이렇게 쓸 수 있습니다!
+
+  ```python
+  from rest_framework import serializers
+  from .models import Todo
+  
+  class TodoSerializer(serializers.ModelSerializer):
+      
+      class Meta:
+          model = Todo
+          fields = ('id', 'title', 'completed',)
+  ```
+
+
+- views.py - **todo_list_create**
+
+  - POST 요청에 따라 받아온 데이터(`request.data`)에 TodoSerializer를 적용해 가공합니다
+  - 검증에 통과하면 DB에 저장한 뒤, 응답으로 data를 전달합니다
+  - status는 선택!! 사용하면 더 단단하게 만들 수 있습니다
+
+  ```python
+  from rest_framework import status
+  from rest_framework.response import Response
+  from rest_framework.decorators import api_view
+  
+  from .serializers import TodoSerializer
+  
+  @api_view(['GET', 'POST'])
+  def todo_list_create(request):
+      if request.method == 'GET':
+          ...
+      elif request.method == 'POST':
+          serializer = TodoSerializer(data=request.data)
+          if serializer.is_valid(raise_exception=True):
+              serializer.save()
+              return Response(serializer.data, status=status.HTTP_201_CREATED)
+  ```
+
+  
+
+### client
+
+##### CreateTodo.vue
+
+###### script
+
+- `createTodo`
+
+  - data에 정의된 **title**을 이용해 **새로운 todoItem**을 생성한 뒤, axios 요청을 보냅니다
+    - method : POST
+    - url : `'http://127.0.0.1:8000/todos/'`
+    - data : todoItem
+
+  ##### :thinking: 새로운 todo를 입력한 뒤, TodoList로 이동할 수는 없을까??
+
+  - `this.$router.push({ name: 'TodoList' })`
+  - 응답을 받은 뒤, TodoList로 바로 연결합니다!! 
+  - name대신 url을 작성해도 OK
+
+  ```vue
+  <script>
+  import axios from'axios'
+  
+  export default {
+    name: 'CreateTodo',
+    data: function () {
+      return {
+        title: '',
+      }
+    },
+    methods: {
+      createTodo: function () {
+        const todoItem = {
+          title: this.title,
+        }
+  
+        if (todoItem.title) {
+          axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8000/todos/',
+            data: todoItem
+          })
+            .then((res) => {
+              console.log(res)
+              this.$router.push({ name: 'TodoList' })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+          }
+      },
+    }
+  }
+  </script>
+  ```
+
+  
+
+###### template
+
+- input태그에 `keyup.enter`가 발생하거나, button을 `click`하면 createTodo가 실행됩니다
+
+- input태그에 입력된 값을 input에서도 사용하고, data에도 저장하기 위해 `v-model`로 양방향 바인딩 해줍니다!
+
+  ```vue
+  <template>
+    <div>
+      <input type="text" v-model.trim="title" @keyup.enter="createTodo">
+      <button @click="createTodo">+</button>
+    </div>
+  </template>
+  ```
+
+<br>
+
+###### client의 역할!!!!! 헷갈리지 말기
+
+> DB, Data에 맞게 요청 보내기
+>
+> 요청이 성공적으로 처리되었을 때 화면 바꾸는 것!!! (자동으로 되지 않는다!!!!)
+
+<br>
+
+### 1.1.3. Todo Delete
+
+> 필요없는 todo를 삭제합시다
+
+### Server
+
+- **models.py**
+
