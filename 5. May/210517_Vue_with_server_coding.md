@@ -743,6 +743,8 @@ $ npm run serve
 
 - todo를 `click`하면 `updateTodoStatus`를 실행하여 기존의 completed를 변경합니다
 
+  - 변경된 todo가 무엇인지 알 수 있도록 인자로 넘겨줍니다
+
   ```vue
   <template>
     <div>
@@ -756,6 +758,50 @@ $ npm run serve
       <button @click="getTodos">Get Todos</button>
     </div>
   </template>
+  ```
+
+###### script
+
+- `updateTodoStatus`
+  - 인자로 받은 todo를 그대로 복사한 뒤, completed만 반대로 바꿔준 **todoItem**을 생성하여 axios 요청을 보냅니다
+    - method : PUT
+    - url : `http://127.0.0.1:8000/todos/${todo.id}/`
+    - data : todoItem
+
+  ##### :anger: 응답을 받았는데... 왜 todo에 표시는 안되지??
+
+  - 요청을 보내서 DB에 저장해줬을 뿐! 화면에 보여주기위해서는 client에서 변화가 필요합니다
+  - delete처럼 getTodo를 다시 하는 것도 하나의 방법입니다
+  - 전체 중 단 하나의 **todo의 completed만 변경**되면 되므로, 해당 값만 바꿔줍니다
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    ...
+    methods: {
+      ...
+      updateTodoStatus: function (todo) {
+        const todoItem = {
+          ...todo,
+          completed: !todo.completed
+        }
+  
+        axios({
+          method: 'put',
+          url: `http://127.0.0.1:8000/todos/${todo.id}/`,
+          data: todoItem,
+        })
+          .then((res) => {
+            console.log(res)
+            todo.completed = !todo.completed
+          })
+        },
+      },
+    ...
+  }
+  </script>
   ```
 
   
