@@ -846,3 +846,86 @@ $ npm run serve
 >
 > 가장 먼저 server에 필요한 model을 정의하고, 적절한 serializer를 구성해봅시다!!!
 
+### Server
+
+###### 이미 Custon User model이 형성되어있으므로, 바로 시작합시다!
+
+##### todos/`models.py` - `Todo`
+
+- **User (1) : Todo (N) **
+
+  - **ForeginKey**를 사용해 둘의 관계를 작성합니다!!!
+  - model에서 user를 가져올 때는 **AUTH_USER_MODEL**을 사용합니다
+  - related_name은 **todos**로 설정하겠습니다
+    - 설정하지 않으면, 역참조시 todo_set을 사용합니다.
+
+  ```python
+  from django.db import models
+  from django.conf import settings
+  
+  class Todo(models.Model):
+      # user와 todo의 model관계 작성
+      user = models.ForeignKey(
+              settings.AUTH_USER_MODEL, 
+              on_delete=models.CASCADE,
+              related_name='todos'
+          )
+      title = models.CharField(max_length=50)
+      completed = models.BooleanField(default=False)
+  
+      def __str__(self):
+          return self.title
+  ```
+
+  
+
+- **migrate**
+
+  - 기존 DB를 지우고, 새로 migrate를 진행합시다! (지우는게 편해요...)
+
+  ```shell
+  $ python manage.py makemigrations
+  $ python manage.py migrate
+  ```
+
+<br>
+
+##### accounts/serializers.py - `UserSerializer`
+
+###### signup에 사용될 부분입니다!
+
+- **write_only=True**
+
+  - password 데이터는 serializing해서 검증 및 암호화해야하지만, **응답으로 넘겨주진 않습니다**
+
+- **get_user_model()**
+
+  - model.py가 아닌 곳에서 user는 get_user_model을 사용합니다
+
+  ```python
+  from rest_framework import serializers
+  from django.contrib.auth import get_user_model
+  
+  User = get_user_model()
+  
+  class UserSerializer(serializers.ModelSerializer):
+  
+      password = serializers.CharField(write_only=True)
+      
+      class Meta:
+          model = User
+          fields = ('username', 'password',)
+  ```
+
+  
+
+<br>
+
+## 2.2. Signup
+
+> 회원가입을 만들어봅시다!
+>
+> 회원가입에는 앞으로 이 방식을 적용하면 됩니다@@@
+
+### Server
+
