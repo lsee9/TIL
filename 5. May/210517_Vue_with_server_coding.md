@@ -1340,6 +1340,10 @@ $ npm run serve
   - **router-view**에서 `login`이벤트를 감지하면, `isLogin = true`로 값을 변경합니다
   - 하위 컴포넌트가 router-view에 나타나는 형태이므로, 해당 위치에서 이벤트를 인지한다는 사실!!! :cactus:
 
+- **:isLogin="isLogin"**
+
+  - 하위 컴포넌트에서 login상태를 확인할 수 있도록 isLogin을 내려줍니다
+
 - **v-if**
 
   - 로그인 `안한` 경우
@@ -1360,12 +1364,85 @@ $ npm run serve
           <router-link :to="{ name: 'Login' }">Login</router-link> 
         </span>
       </div>
-      <router-view @login="isLogin=true"/>
+      <router-view @login="isLogin=true" :isLogin="isLogin"/>
     </div>
   </template>
   ```
 
 <br>
+
+#### 로그인 해야만 페이지에 접근할 수 있다!! :page_facing_up:
+
+> TodoList와 CreateTodo에서도 Login을 한 경우만 실행!!!
+>
+> 아니면 Login페이지로 보내줍시다
+
+##### TodoList.vue
+
+- **props**
+
+  - isLogin 데이터를 받아와 type를 지정합니다
+
+- **created**
+
+  - 시작되자마자 로그인되지 않은 경우 Login페이지로 보내줍니다
+
+  ```vue
+  <script>
+  ...
+  export default {
+    name: 'TodoList',
+    props: {
+      isLogin: {
+        type: Boolean,
+      },
+    },
+    ...
+    created: function () {
+      if (!this.isLogin) {
+        this.$router.push({ name: 'Login' })
+      }
+      this.getTodos()
+    }
+  }
+  </script>
+  ```
+
+  
+
+##### CreateTodo.vue
+
+- **props**
+
+  - isLogin 데이터를 받아와 type를 지정합니다
+
+- **created**
+
+  - 시작되자마자 로그인되지 않은 경우 Login페이지로 보내줍니다
+
+  ```vue
+  <script>
+  ...
+  export default {
+    name: 'CreateTodo',
+    props: {
+      isLogin: {
+        type: Boolean,
+      },
+    },
+    ...
+    created () {
+      if (!this.isLogin) {
+        this.$router.push({ name: 'Login' })
+      }
+    },
+  }
+  </script>
+  ```
+
+  
+
+
 
 #### :thinking: 새로고침해도 로그인을 유지하려면??
 
@@ -1468,3 +1545,244 @@ $ npm run serve
 
   
 
+<br>
+
+<br>
+
+## 2.4. 유저별 Todo
+
+> 유저도 만들어졌겠다
+>
+> 자신이 작성한 Todo만 볼 수 있게야겠죠??
+>
+> 또한 글의 수정, 삭제도 동일 유저만 가능해야합니다!!!
+
+### Server
+
+##### todos/views.py
+
+###### :heavy_check_mark: 인증을 위한 둘의 순서!! 매우 중요!!
+
+- `@authentication_classes([JSONWebTokenAuthentication])`
+
+  - JWT 자체를 검증한 인증 여부와 상관없이, JWT가 유효한지 여부만 파악
+
+- `@permission_classes([IsAuthenticated])`
+
+  - 인증되지 않은 상태로 요청 시, '자격 인증 데이터가 제공되지 않았습니다'와 같은 메세지 응답
+
+  ```python
+  from rest_framework.decorators import authentication_classes, permission_classes
+  from rest_framework.permissions import IsAuthenticated
+  from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+  
+  
+  @api_view(['GET', 'POST'])
+  @authentication_classes([JSONWebTokenAuthentication])
+  @permission_classes([IsAuthenticated])
+  def todo_list_create(request):
+      #...
+      
+  @api_view(['PUT', 'DELETE'])
+  @authentication_classes([JSONWebTokenAuthentication])
+  @permission_classes([IsAuthenticated])
+  def todo_update_delete(request, todo_pk):
+      #...
+  ```
+
+- **todo_list_create**
+
+  - GET : user에 해당하는 todo만 응답으로 보내줘야합니다
+    - `todos = request.user.todo`
+    - 요청한 user로부터 역참조를 통해 todo를 가져옵니다
+  - POST : 저장을 위해 user정보를 전달해줘야합니다!!
+    - `serializer.save(user=request.user)`
+    - 요청한 유저에대한 정보를 저장합니다
+
+  ```python
+  @api_view(['GET', 'POST'])
+  @authentication_classes([JSONWebTokenAuthentication])
+  @permission_classes([IsAuthenticated])
+  def todo_list_create(request):
+      if request.method == 'GET':
+          # todo = Todo.objects.filter(pk=request.user.pk)도 가능
+          ##########
+          todos = request.user.todo
+          ##########
+          serializer = TodoSerializer(todos, many=True)
+          return Response(serializer.data)
+  
+      elif request.method == 'POST':
+          serializer = TodoSerializer(data=request.data)
+          if serializer.is_valid(raise_exception=True):
+              ############
+              serializer.save(user=request.user)
+              ###########
+              return Response(serializer.data, status=status.HTTP_201_CREATED)
+  ```
+
+  
+
+### Client
+
+###### :cherries: client는 요청마다 token을 header에 붙여야합니다!
+
+##### TodoList.vue, CreateTodo.vue
+
+###### script
+
+- `JWT ${localStorage.getItem('jwt')}`
+
+  - localStorage에 저장된 token을 가져와 JWT로 만들어줍니다
+  - 이를 axios요청 보낼 때마다 header로 붙여줍니다
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    ...
+    methods: {
+      getTodos: function () {
+        axios({
+          method: 'get',
+          url: 'http://127.0.0.1:8000/todos/',
+          //****************
+          headers: {
+            Authorization: `JWT ${localStorage.getItem('jwt')}`
+          },
+          //****************
+        })
+          ...
+      },
+      deleteTodo: function (todo) {
+        axios({
+          method: 'delete',
+          url: `http://127.0.0.1:8000/todos/${todo.id}/`,
+          //****************
+          headers: {
+            Authorization: `JWT ${localStorage.getItem('jwt')}`
+          },
+          //****************
+        })
+          ...
+      },
+      updateTodoStatus: function (todo) {
+        ...
+  
+        axios({
+          method: 'put',
+          url: `http://127.0.0.1:8000/todos/${todo.id}/`,
+          data: todoItem,
+          //****************
+          headers: {
+            Authorization: `JWT ${localStorage.getItem('jwt')}`
+          },
+          //****************
+        })
+          ...
+        },
+      },
+    ...
+  }
+  </script>
+  ```
+
+  ```vue
+  <script>
+  import axios from'axios'
+  
+  export default {
+    ...
+    methods: {
+      createTodo: function () {
+        ...
+  
+        if (todoItem.title) {
+          axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8000/todos/',
+            data: todoItem,
+            //*********
+            headers: {
+            Authorization: `JWT ${localStorage.getItem('jwt')}`
+            },
+            //*********
+          })
+            ...
+          }
+      },
+    }
+  }
+  </script>
+  ```
+
+
+
+<br>
+
+## 2.5. axios 중복 제거하기
+
+> axios에 같은 내용이 너무 많이 쓰입니다...
+>
+> 좀 줄여볼까요?
+
+### axios creating an instance
+
+- axios instance를 만들어쓸 수 있는 방법!!!!
+- import해서 사용하는 것 알아보자
+
+#### baseAxios.js
+
+- src 안에 만들기
+
+- axios에서 중복되는 부분을 적어줍니다
+
+  ```js
+  import axios from 'axios'
+  
+  export default function baseAxios() {
+    return axios.create({
+      baseURL: 'http://127.0.0.1:8000',
+      headers: {
+        Authorization: `JWT ${localStorage.getItem('jwt')}`
+      },
+    })
+  }
+  ```
+
+  
+
+#### TodoList.vue
+
+- baseAxios를 import해서 수행한 뒤, 뒷부분에 추가적인 내용을 덧붙여줍니다
+
+  ```vue
+  <script>
+  import baseAxios from '@/baseAxios.js'
+  
+  export default {
+    ...
+    methods: {
+      getTodos: function () {
+        //이렇게 붙여줄 수 있습니다!!!
+        baseAxios()({
+          url: 'todos/',
+          methods: 'GET',
+        })
+          .then((res) => {
+            console.log(res)
+            this.todos = res.data
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      },
+      ...
+      },
+    ...
+  }
+  </script>
+  ```
+
+  
