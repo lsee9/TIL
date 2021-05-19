@@ -221,9 +221,9 @@ $ npm run serve
 
 ###### :grey_exclamation: 이 부분은 거의 다 작성되어있기 때문에 흐름에 맞춰 살펴봅시다
 
-## 1.1. TodoList
+## 1.1. Todo List 
 
-> Todo가 직접적으로 보이는 부분입니다
+> Todo를 작성하여 보여주고, 새로운 todo를 작성합시다!
 >
 > 또한 업데이트와 삭제가 이뤄집니다
 
@@ -233,7 +233,9 @@ $ npm run serve
 1. **markup 작성**
    - todo가 보여질 부분
    - todo를 불러오는데 사용할 버튼
-
+   - todo작성하는데 필요한 input
+   - todo 삭제할 버튼
+   
 2. **data 파악**
    - 시간에 따라 변할 수 있는 데이터 : `todo list`
    - data에 todo list를 담을 배열인 `todos`를 정의합니다
@@ -254,7 +256,7 @@ $ npm run serve
 
 ### Server
 
-##### CORS를 위한 설정 :cherries:
+#### :cherries: CORS를 위한 설정 :cherries:
 
 ###### vue와 django가 데이터를 주고받기 위해서는 필수!!!
 
@@ -805,4 +807,42 @@ $ npm run serve
   ```
 
   
+
+<br>
+
+<br>
+
+# 2. 유저가 있는 Todo
+
+> Authentication (인증) 이 필요합니다!!!!
+>
+> 인증된 유저만 글을 작성하고, 자신의 것만 불러와서 볼 수 있어야겠죠???
+
+### 필요한 구성 Check!!!
+
+- **회원가입**한 뒤, **로그인**해야 todo 작성이 가능하다
+- 누가 작성한 todo인지 구분해야한다
+
+##### :star: 따라서, 기존 데이터에 User 정보가 필요하다!!!
+
+<br>
+
+#### 인증방식 - Token(JWT) :heavy_check_mark:
+
+- 회원가입 후 로그인 정보 전달
+- 비밀번호 암호화 및 토큰 생성
+- 토큰 발급 후 client에게 전달
+- local storage에 토큰 저장
+- request header에 token을 붙여서 요청을 보낸다!!!
+- decoding한 결과와 token이 일치하면 성공적으로 응답을 받을 수 있다
+
+<br>
+
+<br>
+
+## 2.1. Model 구성하기
+
+> User 사용을 위해서는 server에 model이 존재해야겠죠???
+>
+> 가장 먼저 server에 필요한 model을 정의하고, 적절한 serializer를 구성해봅시다!!!
 
