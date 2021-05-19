@@ -1200,3 +1200,249 @@ $ npm run serve
 
 ###### script
 
+- **login**
+
+  - 로그인 요청과 함께 token을 받아오기위해 axios 요청을 보냅니다
+
+    - method: POST (문서에 명시!!)
+
+    - url : `http://127.0.0.1:8000/accounts/login/'`
+
+    - data : Object형태로 전달
+
+      ```python
+      {
+        username: this.username,
+        password: this.password,
+      },
+      ```
+
+  - `localStorage.setItem('jwt', res.data.token)`
+    - 응답을 성공적으로 받아오면, **data.token**에 **jwt token**을 확인할 수 있습니다
+    - 이를 통해 로그인 상태를 유지하기 위해서 local Storage에 token을 저장합니다
+    - jwt라는 key값으로 token저장 (object 형태)
+  - `alert(JSON.stringify(err.respones.data))`
+    - 에러 발생시 에러메세지를 띄워줍니다
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    name: 'Login',
+    data: function () {
+      return {
+        username: '',
+        password: '',
+      }
+    },
+    methods: {
+      login: function () {
+        axios({
+          method: 'POST',
+          url: 'http://127.0.0.1:8000/accounts/login/',
+          data: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+          .then(res => {
+            console.log(res)
+            localStorage.setItem('jwt', res.data.token)
+          })
+          .catch(err => {
+            // console.log(err)
+            alert(JSON.stringify(err.respones.data))
+          })
+      }
+    }
+  }
+  </script>
+  ```
+
+  
+
+### 2.3.1. Login 상태 설정
+
+>jwt가 local storage에 저장되어있다고... 로그인이 유지되냐구요..? 하하.. 그럴리가요 :sweat_smile:
+>
+>로그인 상태임을 따로 설정해줘야합니다!!!!!
+>
+>모든 화면에서 login 상태임을 확인할 필요가 있으므로, 가장 상위 컴포넌트인 **App.vue**에 데이터를 선언하도록 합니다
+
+##### account/Login.vue
+
+###### script
+
+- **emit**
+
+  - Login이 이뤄지면, loigin 상태임을 명시하도록 데이터 값을 변경하기 위해 이벤트의 발생을 알립니다
+
+- `this.$router.push({ name: 'TodoList' })`
+
+  - 로그인을 하면 바로 TodoList로 이동합니다
+
+  ```vue
+  <script>
+  ...
+  export default {
+    ...
+    methods: {
+      login: function () {
+        axios({
+          ...
+        })
+          .then(res => {
+            ...
+            // 이벤트를 알리자
+            this.$emit('login')
+            // 바로 TodoList로 이동하자
+            this.$router.push({ name: 'TodoList' })
+          })
+          .catch(err => {
+            ...
+          })
+      }
+    }
+  }
+  </script>
+  ```
+
+
+
+##### App.vue
+
+###### script
+
+- **data**
+
+  - login 유무를 저장할 데이터인 `isLogin`을 Boolean값으로 정의합니다 (default false)
+
+  ```vue
+  <script>
+  export default {
+    name: 'App',
+    data: function () {
+      return {
+        isLogin: false,
+      }
+    },
+  }
+  </script>
+  ```
+
+  
+
+###### template
+
+- **@login**
+
+  - **router-view**에서 `login`이벤트를 감지하면, `isLogin = true`로 값을 변경합니다
+  - 하위 컴포넌트가 router-view에 나타나는 형태이므로, 해당 위치에서 이벤트를 인지한다는 사실!!! :cactus:
+
+- **v-if**
+
+  - 로그인 `안한` 경우
+    - Signup, Login 페이지만 확인 가능
+  - 로그인 `한` 경우
+    - TodoList, CreateTodo 페이지만 확인 가능
+
+  ```vue
+  <template>
+    <div id="app">
+      <div id="nav">
+        <span v-if="isLogin">
+          <router-link :to="{ name: 'TodoList' }">Todo List</router-link> | 
+          <router-link :to="{ name: 'CreateTodo' }">Create Todo</router-link>
+        </span>
+        <span v-else>
+          <router-link :to="{ name: 'Signup' }">Signup</router-link> |
+          <router-link :to="{ name: 'Login' }">Login</router-link> 
+        </span>
+      </div>
+      <router-view @login="isLogin=true"/>
+    </div>
+  </template>
+  ```
+
+<br>
+
+#### :thinking: 새로고침해도 로그인을 유지하려면??
+
+> App.vue가 실행됐을 때!
+>
+> local Storage에 token이 존재한다면 이미 로그인했다고 할 수 있습니다!
+>
+> 따라서 실행하자마자 token의 유무를 확인해줍시다
+
+##### App.vue
+
+###### script
+
+- **created**
+
+  - App.vue가 실행되자마자, 확인하는 함수를 실행합니다
+  - `getItem`으로 `jwt`를 가져오고, 해당 값이 있다면 **isLogin을 true**로 유지합니다
+
+  ```vue
+  <script>
+  export default {
+    ...
+    created: function () {
+      const token = localStorage.getItem('jwt')
+      if (token) {
+        this.isLogin = true
+      }
+    }
+  }
+  </script>
+  ```
+
+
+
+#### :loudspeaker: 로그아웃 하고싶어어~!
+
+> 로그인과 반대로! token이 없다면 로그인이 안된것이라고 할 수 있습니다!!!
+>
+> 따라서 localStorage에서 token을 없애고 isLogin을 false로 바꿔준다면?????
+>
+> 로그아웃 완료입니다!!!! :champagne:
+
+##### App.vue
+
+###### template
+
+- **@click.native**
+
+  - logout을 위한 router-link에 `click` 이벤트가 발생하면 `logout`을 수행합니다
+
+    ##### :heavy_check_mark: native??? (참고)
+
+    - router-link의 기본은 페이지를 바꾸는 것! (사실 logout은 페이지 변화가 필요없어 적절한 형태는 아니지만... 통일성을 주겠습니다)
+    - 원래라면 하위에 연결된 컴포넌트가 있고, 거기서 발생하는 이벤트를 감지합니다
+    - 그러나 이처럼 **router-link자체에 이벤트를 발생**시키려면 **native를 붙여줘야**합니다
+
+  ```vue
+  <template>
+    <div id="app">
+      <div id="nav">
+        <span v-if="isLogin">
+          ...
+          <!-- 로그아웃 부분!!!!!! -->
+          <router-link @click.native="logout" to="#">Logout</router-link>
+        </span>
+        <span v-else>
+          ...
+        </span>
+      </div>
+      <router-view @login="isLogin=true"/>
+    </div>
+  </template>
+  ```
+
+  
+
+###### script
+
+- **logout**
+  - 
