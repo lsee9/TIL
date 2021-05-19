@@ -992,7 +992,121 @@ $ npm run serve
 
 ###### template
 
-- 
+- **submit**
+
+  - form 태그에서 `submit`이벤트가 발생하면 `signup`을 수행합니다
+    - 이때, 기존 form의 동작(화면 새로고침)을 없애기위해 prevent를 사용합니다 
+
+- **v-model**
+
+  - input 태그의 값이 사용됨과 동시에 data에 저장되어야 하므로 **양방향바인딩**을 수행합니다
+
+  ```vue
+  <template>
+    <div>
+      <h1>Signup</h1>
+      <form @submit.prevent="signup">
+        <div>
+          <label for="username">사용자 이름: </label>
+          <input type="text" id="username" v-model="username">
+        </div>
+        <div>
+          <label for="password">비밀번호: </label>
+          <input type="password" id="password" v-model="password">
+        </div>
+        <div>
+          <label for="passwordConfirmation">비밀번호 확인: </label>
+          <input type="password" id="passwordConfirmation" v-model="passwordConfirmation">
+        </div>
+        <button>회원가입</button>
+      </form>
+    </div>
+  </template>
+  ```
+
+  
 
 ###### script
 
+- **data**
+
+  - 총 3개의 데이터가 필요합니다
+  - `username`, `password`, `passwordConfirmation`
+  - `''` 또는 `null`로 지정
+
+- **signup**
+
+  - 검증 및 저장을 위해 axios 요청을 보냅니다
+
+    - method : POST
+
+    - url: `http://127.0.0.1:8000/accounts/signup/`
+
+    - data : Object 형태로 전달
+
+      ```python
+      {
+        username: this.username,
+        password: this.password,
+        passwordConfirmation: this.passwordConfirmation,
+      },
+      ```
+
+  - `this.$router.push({ name: 'Login' })`
+
+    - 응답을 성공적으로 받아오면, 로그인 화면으로 전환됩니다
+    - name대신 url을 직접 사용할 수도 있습니다
+
+  ###### :recycle: 이건 추가적인 사항!!
+
+  - `alert(JSON.stringify(err.response.data))`
+    - 에러가 발생하면 해당 **에러 메세지를 띄워**줍니다
+    - `console.dir(err)`로 확인한 결과 에러 메세지는 response.data에 Object형태로 존재합니다
+    - `JSON.stringify`를 사용하여 Object의 내용이 보이도록 합니다(안쓰면 Object라고 보임)
+
+  ```vue
+  <script>
+  import axios from 'axios'
+  
+  export default {
+    name: 'Signup',
+    data: function () {
+      return {
+        username: '',
+        password: '',
+        passwordConfirmation: '',
+      }
+    },
+    methods: {
+      signup: function () {
+        axios({
+          method: 'POST',
+          url: 'http://127.0.0.1:8000/accounts/signup/',
+          data: {
+            username: this.username,
+            password: this.password,
+            passwordConfirmation: this.passwordConfirmation,
+          },
+        })
+          .then(()=>{
+            this.$router.push({ name: 'Login' })
+          })
+          .catch(err=>{
+            // console.dir(err)  // 에러객체 전체 확인
+            alert(JSON.stringify(err.response.data))
+          })
+      }
+    }
+  }
+  </script>
+  ```
+
+  
+
+<br>
+
+<br>
+
+## 2.3. Login
+
+> 이제 로그인화면을 구성하고, 직접 로그인을 해봅시다!!!
