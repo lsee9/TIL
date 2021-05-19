@@ -929,3 +929,70 @@ $ npm run serve
 
 ### Server
 
+##### account
+
+- **urls.py**
+
+  - `signup/`으로 경로를 지정해줍니다
+
+  ```python
+  from django.urls import path
+  from . import views
+  
+  
+  urlpatterns = [
+      path('signup/', views.signup),
+  ]
+  ```
+
+  
+
+- **views.py - `signup`**
+  - password를 확인 후 일치하면 serializing 합니다 (passwordConfirmation)
+    - 일치하지 않으면 error에 대한 응답을 줍니다!
+    - 따라서 이런 경우는 **status code** 주는 것이 유용합니다
+  - **set_password** 통해 django의 hashing algorithm을 수행한 뒤 **password를 암호화**합니다
+  - 암호화된 상태로 user 정보를 저장합니다.
+  - write_only로 설정했기때문에, response에는 password가 포함되지 않습니다
+
+  ```python
+  from rest_framework import status
+  from rest_framework.decorators import api_view
+  from rest_framework.response import Response
+  from .serializers import UserSerializer
+  
+  @api_view(['POST'])
+  def signup(request):
+  	#1-1. Client에서 온 데이터를 받아서
+      password = request.data.get('password')
+      password_confirmation = request.data.get('passwordConfirmation')
+  		
+  	#1-2. 패스워드 일치 여부 체크
+      if password != password_confirmation:
+          return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+  		
+  	#2. UserSerializer를 통해 데이터 직렬화
+      serializer = UserSerializer(data=request.data)
+      
+  	#3. validation 작업 진행 -> password도 같이 직렬화 진행
+      if serializer.is_valid(raise_exception=True):
+          user = serializer.save()
+          #4. 비밀번호 해싱 후 
+          user.set_password(request.data.get('password'))
+          user.save()
+      # password는 직렬화 과정에는 포함 되지만 → 표현(response)할 때는 나타나지 않는다.
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+  ```
+
+  
+
+### Client
+
+##### accounts/Signup.vue
+
+###### template
+
+- 
+
+###### script
+
