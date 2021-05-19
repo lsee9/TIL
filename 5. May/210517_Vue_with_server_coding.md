@@ -1110,3 +1110,93 @@ $ npm run serve
 ## 2.3. Login
 
 > 이제 로그인화면을 구성하고, 직접 로그인을 해봅시다!!!
+
+### Server
+
+###### 라이브러리에서 제공하는 로그인을 사용하겠습니다!!!
+
+[공식문서 확인](https://jpadilla.github.io/django-rest-framework-jwt/) :point_left:
+
+- **rest_framework** 설치
+
+  - token 방식 인증 할 수 있는 라이브러리 입니다
+
+  ```shell
+  $ pip install djangorestframework-jwt
+  $ pip freeze > requirements.txt 
+  ```
+
+##### account
+
+- **urls.py**
+
+  - 문서를 참고하여 url을 작성합니다
+
+  ```python
+  from rest_framework_jwt.views import obtain_jwt_token
+  #...
+  
+  urlpatterns = [
+      #...
+      path('login/', obtain_jwt_token),
+  ]
+  ```
+
+##### mypjt
+
+- **settings.py**
+
+  - `JWT_EXPIRATION_DELTA`를 사용해 token의 유효기간을 설정합니다
+  - 기본은 seconds=300 (5분) 입니다
+  - 유효기간은 짧은 것이 좋지만, 현재는 개발하는 동안 로그인을 유지하기 위해 5시간으로 늘려줍니다
+
+  ```python
+  import datetime
+  
+  JWT_AUTH = {
+      'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=5),
+  }
+  ```
+
+###### :heavy_heart_exclamation: 서버에서 필요한 로그인 기능은 라이브러리로 완수!!
+
+<br>
+
+### Client
+
+##### accounts/Login.vue
+
+###### template
+
+- **submit**
+
+  - form에 `submit`이벤트가 발생하면 `login`을 수행합니다.
+  - prevent를 사용해 기존 form의 동작을 무시합니다
+
+- **v-model**
+
+  - input 데이터의 **양방향 바인딩**을 위해 사용합니다
+
+  ```vue
+  <template>
+    <div>
+      <h1>Login</h1>
+      <form @submit.prevent="login">
+        <div>
+          <label for="username">사용자 이름: </label>
+          <input type="text" id="username" v-model="username">
+        </div>
+        <div>
+          <label for="password">비밀번호: </label>
+          <input type="password" id="password" v-model="password">
+        </div>
+        <button>로그인</button>
+      </form>
+    </div>
+  </template>
+  ```
+
+  
+
+###### script
+
