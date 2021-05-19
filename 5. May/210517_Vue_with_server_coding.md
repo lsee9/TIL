@@ -1445,4 +1445,26 @@ $ npm run serve
 ###### script
 
 - **logout**
-  - 
+
+  - `isLogin`을 `false`로 바꿔줍니다
+  - `removeItem`으로 `jwt`를 삭제합니다
+  - 로그아웃하면 로그인 페이지로 이동해줍시다
+
+  ```vue
+  <script>
+  export default {
+    ...
+    methods: {
+      logout () {
+        this.isLogin = false
+        localStorage.removeItem('jwt')
+        this.$router.push({ name: 'Login' })
+      },
+    },
+    ...
+  }
+  </script>
+  ```
+
+  
+
